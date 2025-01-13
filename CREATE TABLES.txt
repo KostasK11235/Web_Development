@@ -1,0 +1,103 @@
+CREATE TABLE Professor(
+prof_full_name VARCHAR(50) NOT NULL,
+prof_email VARCHAR(20) NOT NULL,
+prof_mobile VARCHAR(10) NOT NULL,
+prof_phone VARCHAR(15) NOT NULL,
+prof_field_of_study VARCHAR(255) NOT NULL,
+prof_property ENUM('ΔΕΠ', 'ΕΔΙΠ', 'ΕΤΕΠ', 'ΕΕΠ', 'Α', 'Β', 'Γ') DEFAULT NULL,
+prof_username VARCHAR(20) UNIQUE NOT NULL,
+prof_password VARCHAR(255) NOT NULL DEFAULT 'password',
+PRIMARY KEY (prof_email));
+
+CREATE TABLE Student(
+std_full_name VARCHAR(50) NOT NULL,
+std_AM INT(10) AUTO_INCREMENT,
+std_email VARCHAR(20) NOT NULL,
+std_mobile VARCHAR(10) NOT NULL,
+std_phone VARCHAR(15) NOT NULL,
+std_full_address TEXT NOT NULL,
+std_ECTS INT DEFAULT NULL,
+std_year_of_study INT DEFAULT 1,
+std_username VARCHAR(20) UNIQUE NOT NULL,
+std_password VARCHAR(255) NOT NULL DEFAULT 'password',
+PRIMARY KEY (std_AM));
+
+CREATE TABLE Secretariat(
+sec_full_name VARCHAR(50) NOT NULL,
+sec_email VARCHAR(20) NOT NULL,
+sec_mobile VARCHAR(10) NOT NULL,
+sec_phone VARCHAR(15) NOT NULL,
+sec_username VARCHAR(20) UNIQUE NOT NULL,
+sec_password VARCHAR(255) NOT NULL DEFAULT 'password',
+PRIMARY KEY (sec_email));
+
+CREATE TABLE Thesis(
+th_id INT AUTO_INCREMENT,
+th_title VARCHAR(255) NOT NULL,
+th_description TEXT NOT NULL,
+th_pdf_attachment VARCHAR(255),
+th_status ENUM('Under Assignment','Active','Under Review','Completed') NOT NULL DEFAULT 'Under Assignment',
+th_student_AM INT(10),
+th_supervisor VARCHAR(20) NOT NULL,
+th_committee_members JSON,
+th_assigned_date DATE,
+th_completion_date DATE,
+PRIMARY KEY (th_id,th_student_AM,th_supervisor),
+FOREIGN KEY (th_student_AM) REFERENCES Student (std_AM),
+FOREIGN KEY (th_supervisor) REFERENCES Professor (prof_email));
+
+
+CREATE TABLE Requests(
+req_id INT AUTO_INCREMENT,
+req_thesis_id INT NOT NULL,
+req_student_AM INT(10) NOT NULL,
+req_professor VARCHAR(20) NOT NULL,
+req_response ENUM('Accepted','Declined','Pending') NOT NULL DEFAULT 'Pending',
+req_query_date DATE,
+req_answer DATE,
+PRIMARY KEY (req_id,req_thesis_id,req_student_AM,req_professor),
+FOREIGN KEY (req_thesis_id) REFERENCES Thesis (th_id),
+FOREIGN KEY (req_student_AM) REFERENCES Student (std_AM),
+FOREIGN KEY (req_professor) REFERENCES Professor (prof_email));
+
+CREATE TABLE Notes(
+note_id INT AUTO_INCREMENT,
+note_thesis_id INT NOT NULL,
+note_creator VARCHAR(20) NOT NULL,
+note_content TEXT(300) NOT NULL,
+note_timestap TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (note_id),
+FOREIGN KEY (note_thesis_id) REFERENCES Thesis (th_id),
+FOREIGN KEY (note_creator) REFERENCES Professor (prof_email));
+
+CREATE TABLE Submissions(
+sub_id INT AUTO_INCREMENT,
+sub_thesis_id INT NOT NULL,
+sub_student_AM INT(10) NOT NULL,
+sub_paper_file_path VARCHAR(255) NOT NULL,
+sub_extra_material_path VARCHAR(255),
+sub_upload_date DATE NOT NULL DEFAULT CURRENT_DATE,
+PRIMARY KEY (sub_id,sub_thesis_id,sub_student_AM),
+FOREIGN KEY (sub_thesis_id) REFERENCES Thesis (th_id),
+FOREIGN KEY (sub_student_AM) REFERENCES Student (std_AM));
+
+CREATE TABLE Announcements (
+    ann_id INT AUTO_INCREMENT,
+    ann_title VARCHAR(255) NOT NULL,
+    ann_content TEXT NOT NULL,
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    format ENUM('XML', 'JSON') NOT NULL,
+    PRIMARY KEY (ann_id));
+
+CREATE TABLE Grades (
+    grd_id INT AUTO_INCREMENT,
+    grd_thesis_id INT NOT NULL,
+    grd_professor VARCHAR(20) NOT NULL,
+    grd_criteria JSON NOT NULL,
+    grd_final_grade FLOAT NOT NULL,
+    grdd_graded_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY (grd_id),
+    FOREIGN KEY (grd_thesis_id) REFERENCES Thesis(th_id),
+    FOREIGN KEY (grd_professor) REFERENCES Professor (prof_email));
+    
+   
