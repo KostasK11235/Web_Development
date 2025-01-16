@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <!-- Σύνδεση με το εξωτερικό αρχείο CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Επικεφαλίδα -->
+    <header>
+      <h2>Η Σελίδα Μου</h2>
+    </header>
+
+    <!-- Μενού πλοήγησης  -->
+    <nav>
+      <a href="#home">Αρχική</a>
+      <a href="#about">Σχετικά</a>
+      <a href="#contact">Επικοινωνία</a>
+    </nav>
+
+    <!-- Κύριο τμήμα: Φόρμα Σύνδεσης -->
+    <main>
+      <div class="login-container">
+        <h1>Σύνδεση</h1>
+        <div class="form-group">
+          <label for="username">Όνομα Χρήστη</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Πληκτρολόγησε το όνομα χρήστη"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Κωδικός</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Πληκτρολόγησε τον κωδικό"
+          />
+        </div>
+        <button id="loginBtn">Σύνδεση</button>
+
+        <!-- Περιοχή για εμφάνιση μηνύματος -->
+        <div id="message" class="message"></div>
+      </div>
+    </main>
+
+    <!-- Υποσέλιδο -->
+    <footer>
+      <p>&copy; 2025 - Η Σελίδα Μου</p>
+    </footer>
+
+    <!-- Σύνδεση με το εξωτερικό αρχείο JavaScript -->
+    <script src="script.js"></script>
+  </body>
+</html>
