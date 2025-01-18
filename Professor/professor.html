@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Professor main page</title>
+    <!-- Σύνδεση με το εξωτερικό αρχείο CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Επικεφαλίδα -->
+    <header>
+        <img src="logo_gr.png" alt="University Logo" class="header-logo" />
+    </header>
+
+    <!-- Μενού πλοήγησης  -->
+    <nav>
+      <a href="#home">Αρχική</a>
+      <a href="#theses" id="createThesisButton">Δημιουργία Διπλωματικής</a>
+      <a href="#assign">Ανάθεση Διπλωματικής</a>
+      <a href="#theseslist">Προβολή Διπλωματικών</a>
+      <a href="#invitations">Προσκλήσεις σε Επιτροπή</a>
+      <a href="#statistics">Στατιστικά Διπλωματικών</a>
+      <a href="#management">Διαχείρηση Διπλωματικών</a>
+    </nav>
+
+    <nav class="logout-nav">
+        <a href="#logout" class="logout-button">Αποσύνδεση</a>
+      </nav>
+
+    <!-- Κύριο τμήμα: Φόρμα Σύνδεσης -->
+    <main>
+      <div class="announcement-header">
+        <h1>Ανακοινώσεις</h1>
+      </div>
+      <section class="announcements-container">
+        <div id="announcements">
+          <!-- Announcements will be loaded here dynamically -->
+          <p>Loading announcements...</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Υποσέλιδο -->
+    <footer>
+      <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
+    </footer>
+
+    <!-- Σύνδεση με το εξωτερικό αρχείο JavaScript -->
+    <script src="script.js?v=1.0"></script>
+  </body>
+</html>

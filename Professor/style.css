@@ -1,0 +1,266 @@
+/* Βασικό reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    line-height: 1.6;
+  }
+  
+  /* Επικεφαλίδα */
+  header {
+    background-color: cadetblue;
+    color: #ffffff;
+    padding: 1em;
+    text-align: center;
+  }
+  
+  /* Στυλ για το λογότυπο στην επικεφαλίδα */
+  .header-logo {
+    display: block;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Μενού πλοήγησης, χρειάζεται για όλες τις σελίδες μετά το login */
+  nav {
+    display: flex; /* Use flexbox to manage alignment */
+    justify-content: center; /* Center items horizontally */
+    background-color: #333; /* Optional: Adjust background color */
+    padding: 0; /* Add padding to the navigation bar */
+  }
+  
+  nav a {
+    display: inline-block; /* Inline block for proper spacing */
+    color: #ffffff;
+    text-align: center;
+    padding: 0.75em 1em;
+    text-decoration: none;
+    transition: background-color 0.3s ease; /* Optional: Add hover effect */
+  }
+  
+  nav a:hover {
+    background-color: #575757;
+  }
+
+  /* Τα 3 επόμενα χρησιμοποιούνται στην index.html (main page) */
+  .login-nav {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: flex-end; /* Align items to the right */
+    background-color: #f4f4f4; /* Optional: Same background as the main nav */
+    padding: 0.5em 1em; /* Adjust padding for spacing */
+  }
+  
+  /* Στυλ για το κουμπί "Σύνδεση" */
+  .login-nav .login-button {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background-color: #444; /* Slightly darker than the nav background */
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-nav .login-button:hover {
+    background-color: #05a805; /* Hover effect */
+  }
+
+  /* Τα 3 επόμενα χρησιμοποιούνται σε όλες τις σελίδες μετά το login */
+  .logout-nav {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: flex-end; /* Align items to the right */
+    background-color: #f4f4f4; /* Optional: Same background as the main nav */
+    padding: 0.5em 1em; /* Adjust padding for spacing */
+  }
+  
+  .logout-nav .logout-button {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background-color: #444; /* Slightly darker than the nav background */
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-nav .logout-button:hover {
+    background-color: #b80909; /* Hover effect */
+  }
+  
+  /* <main> customization */
+  main {
+    max-width: 1000px; /* Περιορισμός πλάτους */
+    margin: 2em auto;
+    padding: 0;
+  }
+
+  /* next 2 <div class="announcement-header> customization */
+  .announcement-header {
+    background-color: #f4f4f4;
+    color: #000000;
+    padding: 1em; 
+    text-align: center;
+  }
+
+  .announcement-header h1 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: normal;
+  }
+
+  /* next 5 <section class="announcements-container"> customization */
+  .announcements-container {
+    width: 900px;  /* Ensures it uses available width */
+    margin: 2em auto;
+    padding: 1em;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    position: relative;
+  }
+
+  .announcement {
+    border-bottom: 1px solid #ccc;
+    padding: 1em 0;
+  }
+
+  .announcement h2 {
+    margin: 0 0 0.5em;
+    color: #007bff;
+  }
+
+  .announcement p {
+    margin: 0.5em 0;
+    color: #555;
+  }
+
+  .announcement small {
+    color: #999;
+    font-size: 0.9em;
+  }
+
+
+  /* Login page code */
+  /* Κεντρικό τμήμα (login) */
+  body.login-page main {
+    max-width: 480px; /* Περιορισμός πλάτους */
+    margin: 2em auto;
+    padding: 2em;
+  }
+
+  /* next 2 <div class="login-container"> */
+  .login-container {
+    width: 400px;
+    background-color: #ffffff;
+    padding: 2em;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    position: center;
+  }
+  
+  .login-container h1 {
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #333;
+  }
+  
+  /* next 3  <div class="form-group"> */
+  .form-group {
+    margin-bottom: 1.5em;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  /* Κουμπί "Σύνδεση" στο login page */
+  button {
+    display: block;
+    width: 100%;
+    padding: 0.75em;
+    font-size: 1rem;
+    background-color: cadetblue;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  button:hover {
+    background-color: rgb(5, 163, 168);
+  }
+  
+  /* Μήνυμα αποτελέσματος προσπάθειας σύνδεσης */
+  .message {
+    text-align: center;
+    margin-top: 1em;
+    font-weight: bold;
+  }
+  
+  /* next 3 <div class="add-thesis-container"> Professor_theses.html */
+  .add-thesis-container {
+    text-align: right;
+    margin: 1em;
+  }
+
+  .add-thesis-container button {
+    padding: 0.5em 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .add-thesis-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* next 4 <div class="thesis-container"> professor_theses.html */
+  .thesis-container {
+    max-width: 800px;
+    margin: 2em auto;
+    padding: 1em;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .thesis-item {
+    border-bottom: 1px solid #ccc;
+    padding: 1em 0;
+  }
+  
+  .thesis-item h2 {
+    margin: 0 0 0.5em;
+    color: #007bff;
+  }
+  
+  .thesis-item p {
+    margin: 0.5em 0;
+  }
+  
+  
+  /* Υποσέλιδο */
+  footer {
+    text-align: center;
+    padding: 1em;
+    background-color: #f4f4f4;
+    color: #666;
+    margin-top: 2em;
+  }

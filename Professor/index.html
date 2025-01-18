@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Main page</title>
+    <!-- Σύνδεση με το εξωτερικό αρχείο CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Επικεφαλίδα -->
+    <header>
+        <img src="logo_gr.png" alt="University Logo" class="header-logo" />
+    </header>
+
+    <nav class="login-nav">
+        <a href="#login" class="login-button">Σύνδεση</a>
+    </nav>
+    
+    <main>
+      <div class="announcement-header">
+        <h1>Ανακοινώσεις</h1>
+      </div>
+      <section class="announcements-container">
+        <div id="announcements">
+          <!-- Announcements will be loaded here dynamically -->
+          <p>Loading announcements...</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Υποσέλιδο -->
+    <footer>
+      <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
+    </footer>
+
+    <!-- Σύνδεση με το εξωτερικό αρχείο JavaScript -->
+    <script src="script.js?v=1.0"></script>
+  </body>
+</html>
