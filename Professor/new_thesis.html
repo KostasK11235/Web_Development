@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Νέο Θέμα</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Επικεφαλίδα -->
+    <header>
+      <img src="logo_gr.png" alt="University Logo" class="header-logo" />
+    </header>
+
+    <!-- Κεντρικό τμήμα -->
+    <main>
+      <div class="new-thesis-container">
+        <h1>Δημιουργία Νέου Θέματος</h1>
+
+        <form id="newThesisForm" method="POST" enctype="multipart/form-data">
+          <!-- Title -->
+          <div class="form-group">
+            <label for="thesisTitle">Τίτλος</label>
+            <input type="text" id="thesisTitle" name="thesisTitle" placeholder="Τίτλος θέματος διπλωματικής..." maxlength="255" required/>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="thesisDescription">Περιγραφή</label>
+            <textarea id="thesisDescription" name="thesisDescription" placeholder="Περιγραφή θέματος..." rows="10" maxlength="65535" required></textarea>
+          </div>
+
+          <!-- Attachment -->
+          <div class="form-group">
+            <label for="thesisAttachment">Επισύναψη Αρχείου</label>
+            <input type="file" id="thesisAttachment" name="thesisAttachment" />
+          </div>
+
+          <!-- Buttons -->
+          <div class="form-buttons">
+            <button type="button" id="cancelButton" class="cancel-button">Ακύρωση</button>
+            <button type="submit" id="submitButton" class="submit-button">Υποβολή</button>
+          </div>
+        </form>
+
+        <!-- Popup Message -->
+        <div id="popup" class="popup hidden">
+            <div class="popup-content">
+              <span class="close-button">&times;</span>
+              <p id="popupMessage"></p>
+            </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Υποσέλιδο -->
+    <footer>
+      <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
+    </footer>
+  </body>
+</html>

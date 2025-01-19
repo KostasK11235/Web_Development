@@ -264,3 +264,110 @@
     color: #666;
     margin-top: 2em;
   }
+
+  /* next 11 about new_thesis.html */
+  /* New Thesis Container */
+.new-thesis-container {
+  max-width: 1000px;
+  margin: 2em auto;
+  padding: 2em;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.new-thesis-container h1 {
+  text-align: center;
+  margin-bottom: 1.5em;
+  color: #333;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 1.5em;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+
+.cancel-button,
+.submit-button {
+  width: 120px;
+  padding: 0.75em 1.5em;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #d9534f;
+  color: #ffffff;
+}
+
+.cancel-button:hover {
+  background-color: #c9302c;
+}
+
+.submit-button {
+  background-color: #5cb85c;
+  color: #ffffff;
+}
+
+.submit-button:hover {
+  background-color: #4cae4c;
+}
+
+/* next 4 for Popup Styles new_thesis.html */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  z-index: 1000;
+  display: none;
+}
+
+.popup .popup-content {
+  padding: 16px;
+  text-align: center;
+}
+
+.popup .popup-content .close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}

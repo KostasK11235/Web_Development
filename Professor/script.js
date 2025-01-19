@@ -142,6 +142,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+/* Κουμπί 'Αρχική' */
+document.addEventListener("DOMContentLoaded", function() {
+  // Select the "Αρχική" button 
+  const gotohomepageButton = document.getElementById("gotohomepageButton");
+
+  // Add a click event listener
+  if (gotohomepageButton) {
+      gotohomepageButton.addEventListener("click", function (event) {
+        event.preventDefault();	// Prevent the default anchor behavior
+        window.location.href = "professor.html";	// Redirect to main page
+    });
+  }
+});
+
 /* Κουμπί 'Δημιουργία Διπλωματικής' */
 document.addEventListener("DOMContentLoaded", function () {
   // Select the "Δημιουργία Διπλωματικής" button
@@ -155,3 +169,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+/* Κουμπί 'Νέο Θέμα +' */
+document.addEventListener("DOMContentLoaded", function () {
+  const addThesisButton = document.getElementById("addThesisBtn");
+
+  if (addThesisButton) {
+    addThesisButton.addEventListener("click", function () {
+      window.location.href = "new_thesis.html"; // Redirect to the new thesis page
+    });
+  }
+});
+
+/* Κουμπί 'Ακύρωση' στο new_thesis.html */ 
+document.addEventListener("DOMContentLoaded", function () {
+  const cancelButton = document.getElementById("cancelButton");
+
+  if (cancelButton) {
+    cancelButton.addEventListener("click", function () {
+      window.location.href = "professor_theses.html"; // Redirect to theses page
+    });
+  }
+});
+
+/* Κουμπί 'Υποβολή' στο new_thesis.html */
