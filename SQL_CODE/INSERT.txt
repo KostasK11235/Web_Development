@@ -1,0 +1,24 @@
+INSERT INTO Professor VALUES
+('Ioannis Travoltas','travoltas@ceid.upatras.gr','6955555555','2610555555','Martial Mathematics','ΔΕΠ'),
+('Mattheos Makonahis','makonahis@ceid.upatras.gr','6955555235','2610559855','Quantum Theater','ΕΔΙΠ'),
+('Georgios Klouneis','klouneis@ceid.upatras.gr','6954455555','2610575555','High Performance Computing','ΔΕΠ'),
+('Natalia Portman','portman@ceid.upatras.gr','6955544555','2610512555','Biomedical Engineering','ΔΕΠ'),
+('Katerina Mplanset','mplanset@ceid.upatras.gr','6955555557','2610755555','Machine Vision','ΕΕΠ'),
+('Margarita Rompi','margrompi@ceid.upatras.gr','6955512355','261055455','Automation Systems','ΔΕΠ'),
+('Hlias Nison','hnison@ceid.upatras.gr','6955559875','2610591555','Telecommunications','ΕΤΕΠ'),
+('Samouil Tzakson','tzakson@ceid.upatras.gr','6955392555','2610558155','5G Networks','ΕΔΙΠ'),
+('Ioulia Romperts','romperts@ceid.upatras.gr','6955578555','2610595555','IoT Technologies','ΕΕΠ'),
+('Leonardo Dikaprios','dikaprios@ceid.upatras.gr','6955555552','2610553755','Image Processing','ΔΕΠ'),
+('Pinelopi Krouz','pinelopik@ceid.upatras.gr','6955555512','2610558355','Informatics Law','ΕΔΙΠ');
+
+INSERT INTO Student VALUES
+('Karaiskos Konstantinos', 1072636, 'up1072636@ceid.upatras.gr', '6941234567', '2610123456', '123 Main St, Athens, Greece', 250, 6),
+('Antria Karvouni', 1064999, 'up1064999@ceid.upatras.gr', '6945678901', '2610456789', '456 Elm St, Patras, Greece', 260, 6),
+('Katerina Apostolou', 1098765, 'up1098765@ceid.upatras.gr', '6947890123', '2610789012', '789 Oak St, Thessaloniki, Greece', 190, 4),
+('Andreas Nikolaou', 1098123, 'up1098123@ceid.upatras.gr', '6943456789', '2610345678', '101 Maple Ave, Heraklion, Greece', 120, 5),
+('Stelios Anatolitis', 1120025, 'up1120025@ceid.upatras.gr', '6948901234', '2610678901', '234 Pine St, Ioannina, Greece', 150, 6),
+('Eleni Kyriakidou', 1233006, '1233006@ceid.upatras.gr', '6940123456', '2610890123', '567 Cedar Blvd, Larissa, Greece', 20, 1),
+('Christos Theocharatos', 1422007, 'up1422007@ceid.upatras.gr', '6946789012', '2610234567', '890 Birch St, Volos, Greece', 250, 5),
+('Nikos Samarinas', 1023008, 'up1023008@ceid.upatras.gr', '6949012345', '2610567890', '345 Walnut St, Chania, Greece', 270, 5),
+('Dimitris Hlias', 1073009, 'up1073009@ceid.upatras.gr', '6942345678', '2610123457', '678 Chestnut Ave, Rhodes, Greece', 240, 5),
+('Christos Voglis', 1082010, 'up1082010@ceid.upatras.gr', '6943456780', '2610789011', '910 Sycamore Ln, Kavala, Greece', 150, 3);

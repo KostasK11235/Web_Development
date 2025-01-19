@@ -1,0 +1,17 @@
+DELIMITER $
+
+CREATE TRIGGER insert_professor_user
+BEFORE INSERT ON Professor
+FOR EACH ROW
+BEGIN
+	INSERT INTO Users (usr_username,usr_password,usr_property) VALUES (NEW.prof_email,'password','PROFESSOR');
+END$
+
+CREATE TRIGGER insert_student_user
+BEFORE INSERT ON Student
+FOR EACH ROW
+BEGIN
+	INSERT INTO Users (usr_username,usr_password,usr_property) VALUES (NEW.std_email,'password','STUDENT');
+END$
+
+DELIMITER ;
