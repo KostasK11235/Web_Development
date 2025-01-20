@@ -39,11 +39,14 @@ th_pdf_attachment VARCHAR(255),
 th_status ENUM('Under Assignment','Active','Under Review','Completed') NOT NULL DEFAULT 'Under Assignment',
 th_student_email VARCHAR(40) UNIQUE DEFAULT NULL,
 th_supervisor VARCHAR(40) NOT NULL,
-th_committee_members JSON,
+th_committee_member1 VARCHAR(40),
+th_committee_member2 VARCHAR(40),
 th_assigned_date DATE,
 th_completion_date DATE,
 PRIMARY KEY (th_id,th_supervisor),
-FOREIGN KEY (th_supervisor) REFERENCES Professor (prof_email));
+FOREIGN KEY (th_supervisor) REFERENCES Professor (prof_email),
+FOREIGN KEY (th_committee_member1) REFERENCES Professor (prof_email),
+FOREIGN KEY (th_committee_member2) REFERENCES Professor (prof_email));
 
 CREATE TABLE Requests(
 req_id INT AUTO_INCREMENT,

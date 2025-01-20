@@ -22,3 +22,9 @@ INSERT INTO Student VALUES
 ('Nikos Samarinas', 1023008, 'up1023008@ceid.upatras.gr', '6949012345', '2610567890', '345 Walnut St, Chania, Greece', 270, 5),
 ('Dimitris Hlias', 1073009, 'up1073009@ceid.upatras.gr', '6942345678', '2610123457', '678 Chestnut Ave, Rhodes, Greece', 240, 5),
 ('Christos Voglis', 1082010, 'up1082010@ceid.upatras.gr', '6943456780', '2610789011', '910 Sycamore Ln, Kavala, Greece', 150, 3);
+
+INSERT INTO Announcements (ann_title,ann_content,ann_date) VALUES ('Adding functionality to \'Προβολή Διπλωματικών\' button','Today we will try to make things happen when a user clicks on \'Προβολή Διπλωματικών\' button and hopefully we will do the same for \'Ανάθεση Διπλωματικής\' button',NOW());
+
+INSERT INTO Thesis (th_title,th_description,th_status,th_supervisor) VALUES 
+('Counter terrorism mathematics for dense matrices','Reaserch on new methods for eliminating dense matrices computational cost terrorism on low power systems with small computational capabilities','Under Assignment','travoltas@ceid.upatras.gr'),
+('Deep learning techniques on biomedical data generation','Use of deep learning techniques to generate biomedical training data for neural networks that detect autoimmune deseases','Under Assignment','portman@ceid.upatras.gr');
