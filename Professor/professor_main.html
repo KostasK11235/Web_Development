@@ -2,16 +2,17 @@
 <html lang="el">
   <head>
     <meta charset="UTF-8" />
-    <title>Professor Theses page </title>
+    <title>Professor main page</title>
+    <!-- Σύνδεση με το εξωτερικό αρχείο CSS -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- Επικεφαλίδα -->
     <header>
-      <img src="logo_gr.png" alt="University Logo" class="header-logo" />
+        <img src="logo_gr.png" alt="University Logo" class="header-logo" />
     </header>
 
-    <!-- Μενού πλοήγησης -->
+    <!-- Μενού πλοήγησης  -->
     <nav>
       <a href="#home" id="gotohomepageButton">Αρχική</a>
       <a href="#theses" id="createThesisButton">Δημιουργία Διπλωματικής</a>
@@ -23,24 +24,20 @@
     </nav>
 
     <nav class="logout-nav">
-      <a href="#logout" class="logout-button">Αποσύνδεση</a>
-    </nav>
+        <a href="#logout" class="logout-button">Αποσύνδεση</a>
+      </nav>
 
-    <!-- Κύριο τμήμα -->
+    <!-- Κύριο τμήμα: Φόρμα Σύνδεσης -->
     <main>
-      <!-- Button to add a new thesis -->
-      <div class="add-thesis-container">
-        <button id="addThesisBtn">Νέο θέμα +</button>
+      <div class="announcement-header">
+        <h1>Ανακοινώσεις</h1>
       </div>
-
-      <!-- Thesis Section -->
-      <div class="thesis-container">
-        <h1>Διπλωματικές</h1>
-        <div id="thesisList">
-          <!-- Theses will be dynamically loaded here -->
-          <p>Loading theses...</p>
+      <section class="announcements-container">
+        <div id="announcements">
+          <!-- Announcements will be loaded here dynamically -->
+          <p>Loading announcements...</p>
         </div>
-      </div>
+      </section>
     </main>
 
     <!-- Υποσέλιδο -->
@@ -48,6 +45,7 @@
       <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
     </footer>
 
+    <!-- Σύνδεση με το εξωτερικό αρχείο JavaScript -->
     <script src="script.js?v=1.0"></script>
   </body>
 </html>

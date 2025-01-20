@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Fetch theses only if on professor_theses.html
-  if (document.querySelector(".thesis-container")) {
-    fetchTheses();
-  }
-  else if(document.querySelector(".announcements-container")) {
+  if(document.querySelector(".announcements-container")) {
     fetchAnnouncements();
+  }
+  else if (document.querySelector(".thesis-container")) {
+    fetchTheses("supervised","thesisList");
+  }
+  else if(document.querySelector(".theses-member-container")) {
+    fetchTheses("participated","participatedThesesList");
   }
 });
 
@@ -51,11 +54,11 @@ function fetchAnnouncements(){
 }
 
 /* Fetch theses data from fetch_theses.php */
-function fetchTheses() {
-  const thesisList = document.getElementById("thesisList");
+function fetchTheses(position, listId) {
+  const thesisList = document.getElementById(listId);
 
   // Fetch data from the server
-  fetch("fetch_theses.php")
+  fetch(`fetch_theses.php?queryType=${position}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,9 +81,9 @@ function fetchTheses() {
         html += `
           <div class="thesis-item">
             <h2><strong>Θέμα:</strong>${thesis.th_title}</h2>
-            <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
-            <p><strong>Φοιτητής/α:</strong>${thesis.th_student_email}</p>
             <p><strong>Περιγραφή:</strong>${thesis.th_description}</p>
+            <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
+            ${position === "participated" && thesis.prof_full_name ? `<p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>` : ""}
           </div>
         `;
       });
@@ -92,6 +95,9 @@ function fetchTheses() {
       thesisList.innerHTML = "<p>Failed to load theses. Please try again later.</p>";
     });
 }
+
+/* Fetch participated theses data from fetch_participated_theses.php */
+
 
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", function () {
@@ -151,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
   if (gotohomepageButton) {
       gotohomepageButton.addEventListener("click", function (event) {
         event.preventDefault();	// Prevent the default anchor behavior
-        window.location.href = "professor.html";	// Redirect to main page
+        window.location.href = "professor_main.html";	// Redirect to main page
     });
   }
 });
@@ -193,3 +199,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* Κουμπί 'Υποβολή' στο new_thesis.html */
+
+/* Κουμπί 'Ανάθεση Διπλωματικής' */
+document.addEventListener("DOMContentLoaded", function() {
+  // Select the "Ανάθεση Διπλωματικής" button 
+  const showThesesButton = document.getElementById("showThesesButton");
+
+  // Add a click event listener
+  if (showThesesButton) {
+    showThesesButton.addEventListener("click", function (event) {
+        event.preventDefault();	// Prevent the default anchor behavior
+        window.location.href = "show_theses.html";	// Redirect to show_theses.html
+    });
+  }
+});

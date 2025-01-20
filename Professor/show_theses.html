@@ -28,20 +28,36 @@
 
     <!-- Κύριο τμήμα -->
     <main>
-      <!-- Button to add a new thesis -->
-      <div class="add-thesis-container">
-        <button id="addThesisBtn">Νέο θέμα +</button>
-      </div>
+        <!-- Filter Section -->
+        <div class="filters-container">
+          <label for="statusFilter">Φίλτρα:</label>
+          <select id="statusFilter" class="dropdown">
+            <option value=""">Κατάσταση</option>
+            <option value="Υπό Ανάθεση">Υπό Ανάθεση</option>
+            <option value="Ενεργή">Ενεργή</option>
+            <option value="Περατωμένη">Περατωμένη</option>
+            <option value="Ακυρωμένη">Ακυρωμένη</option>
+          </select>
+      
+          <select id="roleFilter" class="dropdown">
+            <option value="">Ρόλος</option>
+            <option value="Επιβλέπων">Επιβλέπων</option>
+            <option value="Μέλος">Μέλος</option>
+          </select>
 
-      <!-- Thesis Section -->
-      <div class="thesis-container">
-        <h1>Διπλωματικές</h1>
-        <div id="thesisList">
-          <!-- Theses will be dynamically loaded here -->
-          <p>Loading theses...</p>
+          <button id="confirmFiltersBtn" class="confirm-button">Αναζήτηση</button>
         </div>
-      </div>
+      
+        <!-- Thesis Member Section -->
+        <div class="theses-member-container">
+          <h1>Διπλωματικές</h1>
+          <div id="participatedThesesList">
+            <!-- Theses will be dynamically loaded here -->
+            <p>Loading theses...</p>
+          </div>
+        </div>
     </main>
+      
 
     <!-- Υποσέλιδο -->
     <footer>
