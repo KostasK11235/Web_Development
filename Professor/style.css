@@ -452,3 +452,76 @@
   font-style: italic;
   color: #666;
 }
+
+/* next 13 for show_invitations.html page */
+/* Invitations Section */
+.invitations-container {
+  max-width: 900px;
+  margin: 2em auto;
+  padding: 1em;
+  background-color: #ffffff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.invitations-container h1 {
+  text-align: center;
+  margin-bottom: 1.5em;
+  color: #333;
+}
+
+.invitation-item {
+  border-bottom: 1px solid #ccc;
+  padding: 1em 0;
+}
+
+.invitation-item:last-child {
+  border-bottom: none;
+}
+
+.invitation-item h2 {
+  margin: 0 0 0.5em;
+  color: #007bff;
+}
+
+.invitation-item p {
+  margin: 0.5em 0;
+  color: #555;
+}
+
+.invitation-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.accept-button,
+.reject-button {
+  width: 100px;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.accept-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.accept-button:hover {
+  background-color: #218838;
+}
+
+.reject-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.reject-button:hover {
+  background-color: #c82333;
+}

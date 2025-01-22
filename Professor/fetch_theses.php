@@ -13,35 +13,72 @@ if (!isset($_SESSION['user_email'])) {
 
 $professorEmail = $_SESSION['user_email'];
 
-// Determine which query to execute based on a request parameter
-$queryType = $_GET['queryType'] ?? 'supervised'; // Default to supervised theses
+// Get query parameters
+$queryType = $_GET['queryType'] ?? 'supervised';
+$status = $_GET['status'] ?? '';
+$role = $_GET['role'] ?? '';
 
+$query = "";
+$stmt = null;
+
+// Build the query dynamically based on input
 if ($queryType === 'participated') {
-    // Query for participated theses
-    $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
-              FROM Professor AS p 
-              INNER JOIN Thesis AS t 
-              ON t.th_supervisor = p.prof_email 
-              WHERE t.th_supervisor = ? OR t.th_committee_member1 = ? OR t.th_committee_member2 = ?";
-    $stmt = $conn->prepare($query);
+    if ($role === 'Επιβλέπων') {
+        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
+                  FROM Professor AS p 
+                  INNER JOIN Thesis AS t 
+                  ON t.th_supervisor = p.prof_email 
+                  WHERE t.th_supervisor = ?";
 
-    if (!$stmt) {
-        echo json_encode(['error' => 'Failed to prepare query: ' . $conn->error]);
-        exit;
+        if (!empty($status)) {
+            $query .= " AND t.th_status = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ss", $professorEmail, $status);
+        }else {
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $professorEmail);
+        }
+    } elseif ($role === 'Μέλος') {
+        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
+                  FROM Professor AS p 
+                  INNER JOIN Thesis AS t 
+                  ON t.th_supervisor = p.prof_email";
+
+        if (!empty($status)) {
+            $query .= " WHERE (t.th_committee_member1 = ? OR t.th_committee_member2 = ?) AND t.th_status = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("sss", $professorEmail, $professorEmail, $status);
+        }else {
+            $query .= " WHERE t.th_committee_member1 = ? OR t.th_committee_member2 = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ss", $professorEmail, $professorEmail);
+        }
+    } else {
+        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
+                  FROM Professor AS p 
+                  INNER JOIN Thesis AS t 
+                  ON t.th_supervisor = p.prof_email";
+
+        if (!empty($status)) {
+            $query .= " WHERE (t.th_supervisor = ? OR t.th_committee_member1 = ? OR t.th_committee_member2 = ?) AND t.th_status = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ssss", $professorEmail, $professorEmail, $professorEmail, $status);
+        }else {
+            $query .= " WHERE t.th_supervisor = ? OR t.th_committee_member1 = ? OR t.th_committee_member2 = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("sss", $professorEmail, $professorEmail, $professorEmail);
+        }
     }
-
-    $stmt->bind_param("sss", $professorEmail, $professorEmail, $professorEmail);
 } else {
-    // Default query for supervised theses
-    $query = "SELECT th_title, th_description, th_status FROM Thesis WHERE th_supervisor = ?";
+    // Default to supervised theses
+    $query = "SELECT t.th_title, t.th_description, t.th_status FROM Thesis AS t WHERE t.th_supervisor = ?";
     $stmt = $conn->prepare($query);
-
-    if (!$stmt) {
-        echo json_encode(['error' => 'Failed to prepare query: ' . $conn->error]);
-        exit;
-    }
-
     $stmt->bind_param("s", $professorEmail);
+}
+
+if (!$stmt) {
+    echo json_encode(['error' => 'Failed to prepare query: ' . $conn->error]);
+    exit;
 }
 
 $stmt->execute();

@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
   else if(document.querySelector(".theses-member-container")) {
     fetchTheses("participated","participatedThesesList");
   }
+  else if(document.querySelector(".invitations-container")){
+    fetchInvitations();
+  }
 });
 
 /* Fetch announcements from fetch_announcements.php */
@@ -80,7 +83,11 @@ function fetchTheses(position, listId) {
       data.forEach((thesis) => {
         html += `
           <div class="thesis-item">
-            <h2><strong>Θέμα:</strong>${thesis.th_title}</h2>
+            <h2>
+              <a href="show_thesis_details.html?title=${encodeURIComponent(thesis.th_title)}" class="thesis-link">
+                <strong>Θέμα:</strong>${thesis.th_title}
+              </a>
+            </h2>
             <p><strong>Περιγραφή:</strong>${thesis.th_description}</p>
             <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
             ${position === "participated" && thesis.prof_full_name ? `<p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>` : ""}
@@ -96,8 +103,142 @@ function fetchTheses(position, listId) {
     });
 }
 
-/* Fetch participated theses data from fetch_participated_theses.php */
+/* Fetch theses data based on the Search clauses */
+document.addEventListener("DOMContentLoaded", function () {
+  const participatedThesesList = document.getElementById("participatedThesesList");
+  const confirmFiltersBtn = document.getElementById("confirmFiltersBtn");
 
+  if (confirmFiltersBtn) {
+    confirmFiltersBtn.addEventListener("click", function () {
+      // Get the selected values from the dropdown filters
+      const statusFilter = document.getElementById("statusFilter").value || "";
+      const roleFilter = document.getElementById("roleFilter").value || "";
+      const queryType = "participated";
+
+      // Send the selected values to the PHP script
+      fetch(`fetch_theses.php?queryType=${queryType}&status=${statusFilter}&role=${roleFilter}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            participatedThesesList.innerHTML = `<p>${data.error}</p>`;
+            return;
+          }
+
+          if (data.length === 0) {
+            participatedThesesList.innerHTML = "<p>No theses found matching the filters.</p>";
+            return;
+          }
+
+          let html = "";
+          data.forEach((thesis) => {
+            html += `
+              <div class="thesis-item">
+                <h2><strong>Θέμα:</strong> ${thesis.th_title}</h2>
+                <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
+                <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
+                <p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>
+              </div>
+            `;
+          });
+
+          participatedThesesList.innerHTML = html;
+        })
+        .catch((error) => {
+          console.error("Error fetching theses:", error);
+          participatedThesesList.innerHTML = "<p>Failed to load theses. Please try again later.</p>";
+        });
+    });
+  }
+});
+
+// Fetch invitations data from fetch_invitations.php
+function fetchInvitations() {
+  const invitationsContainer = document.getElementById("invitationsList");
+
+  // Fetch invitations from the server
+  fetch("fetch_invitations.php")
+      .then((response) => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then((data) => {
+          if (data.error) {
+              invitationsContainer.innerHTML = `<p>${data.error}</p>`;
+              return;
+          }
+
+          if (data.length === 0) {
+              invitationsContainer.innerHTML = "<p>No invitations found.</p>";
+              return;
+          }
+
+          // Generate HTML for invitations
+          let html = "";
+          data.forEach((invitation) => {
+              html += `
+                  <div class="invitation-item">
+                      <h2>${invitation.th_title}</h2>
+                      <p><strong>Περιγραφή:</strong> ${invitation.th_description}</p>
+                      <p><strong>Επιβλέπων:</strong> ${invitation.th_supervisor}</p>
+                      <div class="invitation-buttons">
+                          <button class="accept-button" data-thesis-id="${invitation.thesis_id}">Αποδοχή</button>
+                          <button class="reject-button" data-thesis-id="${invitation.thesis_id}">Απόρριψη</button>
+                      </div>
+                  </div>
+              `;
+          });
+
+          invitationsContainer.innerHTML = html;
+
+          // Add event listeners for accept/reject buttons
+          document.querySelectorAll(".accept-button").forEach((button) => {
+              button.addEventListener("click", function () {
+                  handleInvitationAction(button.dataset.thesisId, "accept");
+              });
+          });
+
+          document.querySelectorAll(".reject-button").forEach((button) => {
+              button.addEventListener("click", function () {
+                  handleInvitationAction(button.dataset.thesisId, "reject");
+              });
+          });
+      })
+      .catch((error) => {
+          console.error("Error fetching invitations:", error);
+          invitationsContainer.innerHTML = "<p>Failed to load invitations. Please try again later.</p>";
+      });
+};
+
+// Handle accept/reject actions for show_invitations.html
+function handleInvitationAction(thesisId, action) {
+  fetch("handle_invitation.php", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `thesisId=${encodeURIComponent(thesisId)}&action=${encodeURIComponent(action)}`,
+  })
+      .then((response) => response.json())
+      .then((data) => {
+          if (data.error) {
+              alert(`Error: ${data.error}`);
+          } else if (data.success) {
+              alert(data.success);
+              location.reload(); // Reload to update the invitations list
+          }
+      })
+      .catch((error) => {
+          console.error("Error handling invitation action:", error);
+          alert("An error occurred. Please try again.");
+      });
+}
 
 // Wait for the DOM to load
 document.addEventListener("DOMContentLoaded", function () {
@@ -210,6 +351,20 @@ document.addEventListener("DOMContentLoaded", function() {
     showThesesButton.addEventListener("click", function (event) {
         event.preventDefault();	// Prevent the default anchor behavior
         window.location.href = "show_theses.html";	// Redirect to show_theses.html
+    });
+  }
+});
+
+/* Κουμπί 'Προσκλήσεις σε Επιτροπή */
+document.addEventListener("DOMContentLoaded", function() {
+  // Select the "Προσκλήσεις σε Επιτροπή" button
+  const showInvitationsButton = document.getElementById("showInvitationsButton");
+
+  // Add a click event listener
+  if (showInvitationsButton) {
+    showInvitationsButton.addEventListener("click", function (event){
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.location.href = "show_invitations.html"; // Redirect to show_invitations.html
     });
   }
 });
