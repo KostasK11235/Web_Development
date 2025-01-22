@@ -26,5 +26,8 @@ INSERT INTO Student VALUES
 INSERT INTO Announcements (ann_title,ann_content,ann_date) VALUES ('Adding functionality to \'Προβολή Διπλωματικών\' button','Today we will try to make things happen when a user clicks on \'Προβολή Διπλωματικών\' button and hopefully we will do the same for \'Ανάθεση Διπλωματικής\' button',NOW());
 
 INSERT INTO Thesis (th_title,th_description,th_status,th_supervisor) VALUES 
-('Counter terrorism mathematics for dense matrices','Reaserch on new methods for eliminating dense matrices computational cost terrorism on low power systems with small computational capabilities','Under Assignment','travoltas@ceid.upatras.gr'),
-('Deep learning techniques on biomedical data generation','Use of deep learning techniques to generate biomedical training data for neural networks that detect autoimmune deseases','Under Assignment','portman@ceid.upatras.gr');
+('Counter terrorism mathematics for dense matrices','Reaserch on new methods for eliminating dense matrices computational cost terrorism on low power systems with small computational capabilities','Υπό Ανάθεση','travoltas@ceid.upatras.gr'),
+('Deep learning techniques on biomedical data generation','Use of deep learning techniques to generate biomedical training data for neural networks that detect autoimmune deseases','Υπό Ανάθεση','portman@ceid.upatras.gr');
+
+INSERT INTO Requests (req_thesis_id,req_student_email,req_professor,req_query_date) VALUES
+(6,'up1072636@ceid.upatras.gr','travoltas@ceid.upatras.gr',NOW());

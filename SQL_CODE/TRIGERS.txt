@@ -14,4 +14,56 @@ BEGIN
 	INSERT INTO Users (usr_username,usr_password,usr_property) VALUES (NEW.std_email,'password','STUDENT');
 END$
 
+/* Ίσως χρειαστεί να φτιάξουμε trigger και για το update σε request αλλά λογικά οχι γιατι δεν θα υπάρχει ως επιλογή στη σελίδα */
+
+CREATE TRIGGER insert_request
+BEFORE INSERT ON Requests
+FOR EACH ROW
+BEGIN
+    DECLARE thesis_status VARCHAR(25);
+    DECLARE supervisor_email VARCHAR(255);
+
+    -- Fetch the status and supervisor of the thesis associated with the new request
+    SELECT th_status, th_supervisor INTO thesis_status, supervisor_email
+    FROM Thesis 
+    WHERE th_id = NEW.req_thesis_id;
+
+    -- Check if the status is not 'Υπό Ανάθεση' or if the supervisor is the same as the requesting professor
+    IF thesis_status != 'Υπό Ανάθεση' OR supervisor_email = NEW.req_professor THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Δεν μπορεί να σταλεί αίτηση συμμετοχής σε επιτροπή σε διπλωματική που δεν βρίσκεται Υπό Ανάθεση ή αν ο επιβλέπων είναι ο παραλήπτης της αίτησης!';
+    END IF;
+END$
+
+DELIMITER $$
+
+/* Update thesis committee member from response DOESNT WORK RIGHT!!!! */
+CREATE TRIGGER update_committee_member
+BEFORE UPDATE ON Thesis
+FOR EACH ROW
+BEGIN
+    -- Check if the update is trying to change a committee member
+    IF NEW.th_committee_member1 IS NOT NULL OR NEW.th_committee_member2 IS NOT NULL THEN
+        -- Ensure at least one committee member slot is NULL
+        IF OLD.th_committee_member1 IS NOT NULL AND OLD.th_committee_member2 IS NOT NULL THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Both committee member slots are already filled. Cannot update.';
+        END IF;
+
+        -- Assign the new member to the first available slot
+        IF OLD.th_committee_member1 IS NULL THEN
+            SET NEW.th_committee_member1 = NEW.th_committee_member1;
+        ELSEIF OLD.th_committee_member2 IS NULL THEN
+            SET NEW.th_committee_member2 = NEW.th_committee_member2;
+        ELSE
+            -- If both slots are filled, do not proceed
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Unable to assign new committee member. All slots are filled.';
+        END IF;
+    END IF;
+END$
+
 DELIMITER ;
+
+
+So now, we want to add functionality to accept and reject buttons. When accept is clicked we call the invitation_response.php with response as parameter, and query if "UPDATE Requests SET req_response=${response} 
