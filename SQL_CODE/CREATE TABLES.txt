@@ -53,13 +53,21 @@ req_id INT AUTO_INCREMENT,
 req_thesis_id INT NOT NULL,
 req_student_email VARCHAR(40) NOT NULL,
 req_professor VARCHAR(40) NOT NULL,
-req_response ENUM('Accepted','Declined','Pending') NOT NULL DEFAULT 'Pending',
+req_status ENUM('Accepted','Declined','Pending') NOT NULL DEFAULT 'Pending',
 req_query_date DATE,
-req_answer DATE,
 PRIMARY KEY (req_id,req_thesis_id,req_student_email,req_professor),
 FOREIGN KEY (req_thesis_id) REFERENCES Thesis (th_id),
 FOREIGN KEY (req_student_email) REFERENCES Student (std_email),
 FOREIGN KEY (req_professor) REFERENCES Professor (prof_email));
+
+CREATE TABLE Responses(
+res_id INT AUTO_INCREMENT,
+res_req_id INT NOT NULL,
+res_response ENUM('Accepted','Declined','Pending') NOT NULL DEFAULT 'Pending',
+res_answer DATE,
+PRIMARY KEY (res_id,res_req_id),
+FOREIGN KEY (res_req_id) REFERENCES Requests (req_id)
+ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE Notes(
 note_id INT AUTO_INCREMENT,

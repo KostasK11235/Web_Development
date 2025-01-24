@@ -1,0 +1,32 @@
+DELIMITER $$
+
+CREATE PROCEDURE UpdateResponse(
+    IN professorEmail VARCHAR(40),
+    IN thesisId INT,
+    IN action ENUM('Accepted','Declined')
+)
+BEGIN
+    DECLARE tempResId INT;
+
+    -- Fetch the res_id for the given professor and thesis ID
+    SELECT r.res_id 
+    INTO tempResId
+    FROM Responses AS r
+    INNER JOIN Requests AS req ON r.res_req_id = req.req_id
+    WHERE req.req_professor = professorEmail AND req.req_thesis_id = thesisId;
+
+    -- If no matching res_id is found, throw an error
+    IF tempResId IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No matching record found in Responses table.';
+    END IF;
+
+    -- Update the Responses table with the provided action
+    UPDATE Responses
+    SET res_response = action
+    WHERE res_id = tempResId;
+
+END$$
+
+DELIMITER ;
+

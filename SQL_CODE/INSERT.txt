@@ -31,3 +31,7 @@ INSERT INTO Thesis (th_title,th_description,th_status,th_supervisor) VALUES
 
 INSERT INTO Requests (req_thesis_id,req_student_email,req_professor,req_query_date) VALUES
 (6,'up1072636@ceid.upatras.gr','travoltas@ceid.upatras.gr',NOW());
+
+
+SELECT th_id,th_supervisor,th_committee_member1,th_committee_member2 FROM Thesis;
+

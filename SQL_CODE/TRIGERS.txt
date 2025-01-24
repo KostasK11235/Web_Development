@@ -35,35 +35,65 @@ BEGIN
     END IF;
 END$
 
-DELIMITER $$
+/* Insert a response record each time a request is inserted */
+CREATE TRIGGER create_responses
+AFTER INSERT ON Requests
+FOR EACH ROW
+BEGIN 
+    INSERT INTO Responses (res_req_id) VALUES (NEW.req_id);
+END$
 
-/* Update thesis committee member from response DOESNT WORK RIGHT!!!! */
-CREATE TRIGGER update_committee_member
-BEFORE UPDATE ON Thesis
+/* Trigger that handles the responses on thesis invitations */
+CREATE TRIGGER request_response
+BEFORE UPDATE ON Responses
 FOR EACH ROW
 BEGIN
-    -- Check if the update is trying to change a committee member
-    IF NEW.th_committee_member1 IS NOT NULL OR NEW.th_committee_member2 IS NOT NULL THEN
-        -- Ensure at least one committee member slot is NULL
-        IF OLD.th_committee_member1 IS NOT NULL AND OLD.th_committee_member2 IS NOT NULL THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Both committee member slots are already filled. Cannot update.';
-        END IF;
+    DECLARE member1 VARCHAR(40);
+    DECLARE member2 VARCHAR(40);
+    DECLARE professor VARCHAR(40);
+    DECLARE thesis_id INT;
 
-        -- Assign the new member to the first available slot
-        IF OLD.th_committee_member1 IS NULL THEN
-            SET NEW.th_committee_member1 = NEW.th_committee_member1;
-        ELSEIF OLD.th_committee_member2 IS NULL THEN
-            SET NEW.th_committee_member2 = NEW.th_committee_member2;
-        ELSE
-            -- If both slots are filled, do not proceed
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Error: Unable to assign new committee member. All slots are filled.';
+    IF NEW.res_response = 'Accepted' THEN
+    SELECT req_thesis_id,req_professor INTO thesis_id,professor FROM Requests WHERE req_id=NEW.res_req_id;
+    -- Fetch current committee members of the thesis
+    SELECT th_committee_member1, th_committee_member2
+    INTO member1, member2
+    FROM Thesis
+    WHERE th_id = thesis_id;
+
+    -- Check if the committee is full
+    IF member1 IS NOT NULL AND member2 IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'COMMITTEE OF THE SELECTED THESIS HAS NO MORE VACANT POSITIONS.';
+    ELSEIF member1 IS NULL THEN
+        -- Assign professor to the first available slot
+        UPDATE Thesis
+        SET th_committee_member1 = professor  
+        WHERE th_id = thesis_id;
+        
+        UPDATE Requests SET req_status='Accepted',req_answer=NOW() WHERE req_id=NEW.res_req_id;
+        
+        IF member2 IS NOT NULL THEN
+        UPDATE Thesis SET th_status='Ενεργή' WHERE th_id=thesis_id;
+        UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor NOT LIKE professor; 
         END IF;
+    ELSEIF member2 IS NULL THEN
+        -- Assign professor to the second available slot
+        UPDATE Thesis
+        SET th_committee_member2 = professor
+        WHERE th_id = thesis_id;
+        
+        UPDATE Requests SET req_status='Accepted',req_answer=NOW() WHERE req_id=NEW.res_req_id;
+        
+        IF member1 IS NOT NULL THEN
+        UPDATE Thesis SET th_status='Ενεργή' WHERE th_id=thesis_id;
+        UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor NOT LIKE professor;
+        END IF;
+    END IF;
+    ELSEIF NEW.res_response = 'Declined' THEN
+    UPDATE Requests SET req_status='Declined' WHERE req_id=NEW.res_req_id;
     END IF;
 END$
 
 DELIMITER ;
 
-
-So now, we want to add functionality to accept and reject buttons. When accept is clicked we call the invitation_response.php with response as parameter, and query if "UPDATE Requests SET req_response=${response} 
