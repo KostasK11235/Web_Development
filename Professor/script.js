@@ -188,8 +188,8 @@ function fetchInvitations() {
                       <p><strong>Περιγραφή:</strong> ${invitation.th_description}</p>
                       <p><strong>Επιβλέπων:</strong> ${invitation.th_supervisor}</p>
                       <div class="invitation-buttons">
-                          <button class="accept-button" data-thesis-id="${invitation.thesis_id}">Αποδοχή</button>
-                          <button class="reject-button" data-thesis-id="${invitation.thesis_id}">Απόρριψη</button>
+                          <button class="accept-button" data-thesis-id="${invitation.th_id}">Αποδοχή</button>
+                          <button class="reject-button" data-thesis-id="${invitation.th_id}">Απόρριψη</button>
                       </div>
                   </div>
               `;
@@ -200,13 +200,13 @@ function fetchInvitations() {
           // Add event listeners for accept/reject buttons
           document.querySelectorAll(".accept-button").forEach((button) => {
               button.addEventListener("click", function () {
-                  handleInvitationAction(button.dataset.thesisId, "accept");
+                  handleInvitationAction(button.dataset.thesisId, "Accept");
               });
           });
 
           document.querySelectorAll(".reject-button").forEach((button) => {
               button.addEventListener("click", function () {
-                  handleInvitationAction(button.dataset.thesisId, "reject");
+                  handleInvitationAction(button.dataset.thesisId, "Decline");
               });
           });
       })
@@ -214,7 +214,7 @@ function fetchInvitations() {
           console.error("Error fetching invitations:", error);
           invitationsContainer.innerHTML = "<p>Failed to load invitations. Please try again later.</p>";
       });
-};
+}
 
 // Handle accept/reject actions for show_invitations.html
 function handleInvitationAction(thesisId, action) {

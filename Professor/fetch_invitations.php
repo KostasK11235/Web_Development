@@ -18,7 +18,7 @@ $query = "SELECT t.th_title, t.th_supervisor, t.th_id, t.th_description
           FROM Thesis AS t 
           INNER JOIN Requests AS r 
           ON r.req_thesis_id = t.th_id 
-          WHERE r.req_professor = ?";
+          WHERE r.req_professor = ? AND r.req_status='Pending'";
 
 $stmt = $conn->prepare($query);
 
