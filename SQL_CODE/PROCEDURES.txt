@@ -34,16 +34,16 @@ CREATE PROCEDURE AssignThesis(
 )
 BEGIN
     DECLARE studentEmail VARCHAR(40);
-
+    
     -- Fetch student email of the input students name
     SELECT std_email INTO studentEmail FROM Student WHERE std_full_name = studentInfo OR std_AM = studentInfo;
-
+    
     -- If no matching res_id is found, throw an error
     IF studentEmail IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'No matching record found in Student table.';
     END IF;
-
+   
     -- Update the Thesis table with the students email
     UPDATE Thesis SET th_student_email = studentEmail WHERE th_id = thesisID;
 
