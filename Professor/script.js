@@ -4,13 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchAnnouncements();
   }
   else if (document.querySelector(".thesis-container")) {
-    fetchTheses("supervised","thesisList");
+    fetchTheses("supervised","thesisList","");
   }
   else if(document.querySelector(".theses-member-container")) {
-    fetchTheses("participated","participatedThesesList");
+    fetchTheses("participated","participatedThesesList","");
   }
   else if(document.querySelector(".invitations-container")){
     fetchInvitations();
+  }
+  else if (document.querySelector(".assign-thesis-container")) {
+    fetchTheses("supervised","thesisList","Υπό Ανάθεση")
   }
 });
 
@@ -57,11 +60,11 @@ function fetchAnnouncements(){
 }
 
 /* Fetch theses data from fetch_theses.php */
-function fetchTheses(position, listId) {
+function fetchTheses(position, listId, status) {
   const thesisList = document.getElementById(listId);
 
   // Fetch data from the server
-  fetch(`fetch_theses.php?queryType=${position}`)
+  fetch(`fetch_theses.php?queryType=${position}&status=${status}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -81,6 +84,8 @@ function fetchTheses(position, listId) {
 
       let html = "";
       data.forEach((thesis) => {
+        if (status === "")
+        {
         html += `
           <div class="thesis-item">
             <h2>
@@ -93,13 +98,132 @@ function fetchTheses(position, listId) {
             ${position === "participated" && thesis.prof_full_name ? `<p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>` : ""}
           </div>
         `;
+        }
+        else {
+          html += `
+          <div class="assign-thesis-item">
+            <h2>
+              <a href="show_thesis_details.html?title=${encodeURIComponent(thesis.th_title)}" class="thesis-link">
+                <strong>Θέμα:</strong>${thesis.th_title}
+              </a>
+            </h2>
+            <p><strong>Περιγραφή:</strong>${thesis.th_description}</p>
+            <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
+            <div class="assign-buttons-container">
+              <!-- Row for search field and search button -->
+              <div class="search-buttons">
+                <input type="text" class="search-field" placeholder="AM or Full Name" maxlength="50">
+                <button class="search-button">Αναζήτηση</button>
+              </div>
+
+              <!-- Row for assign and cancel buttons -->
+              <div class="assign-buttons">
+                <button class="assign-button" data-thesis-id="${thesis.th_id}">Επιβεβαίωση</button>
+                <button class="cancel-button">Ακύρωση</button>
+              </div>
+            </div>
+          </div>
+        `;
+        }
       });
 
       thesisList.innerHTML = html;
+
+      // Add event listeners for search/confirm/cancel buttons
+      document.querySelectorAll(".search-button").forEach((button) => {
+        button.addEventListener("click", function () {
+          const inputField = document.querySelector(".search-field");
+          const searchValue = inputField.value.trim();
+
+          if (searchValue) {
+            searchStudentAction(searchValue);
+          } else {
+            alert("Please enter a student AM or name.");
+          }
+        });
+      });
+
+      document.querySelectorAll(".assign-button").forEach((button) => {
+        button.addEventListener("click", function () {
+          const thesisId = button.dataset.thesisId;
+          // Find the parent container of the button
+          const parentContainer = button.closest(".assign-thesis-item");
+          const inputField = document.querySelector(".search-field");
+          const studentName = inputField.value.trim();
+
+          if (studentName) {
+            handleAssignmentAction(thesisId, studentName);
+          } else {
+            alert("No student selected for assignment.");
+          }
+        });
+      });
+
+      document.querySelectorAll(".cancel-button").forEach((button) => {
+        button.addEventListener("click", function () {
+          const inputField = document.querySelector(".search-field");
+          inputField.value = ""; // Clear the input field
+        });
+      });
     })
+
     .catch((error) => {
       console.error("Error fetching theses:", error);
       thesisList.innerHTML = "<p>Failed to load theses. Please try again later.</p>";
+    });
+}
+
+/* Search for the student with the given AM or name on assign_thesis.html */
+// Fetch and display student name
+function searchStudentAction(searchValue) {
+  fetch("search_student.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `student=${encodeURIComponent(searchValue)}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const inputField = document.querySelector(".search-field"); // Ensure this points to the correct field
+
+      if (data.error) {
+        alert(`Error: ${data.error}`);
+      } else if (data.length > 0 && data[0].std_full_name) {
+        inputField.value = data[0].std_full_name; // Display the student's name in the field
+      } else {
+        const inputField = document.querySelector(".search-field");
+        inputField.value = ""; // Clear the input field
+        alert("No matching student found.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error searching student:", error);
+      alert("An error occurred. Please try again.");
+    });
+}
+
+/* Assign the thesis to the selected student */
+function handleAssignmentAction(thesisId, studentName) {
+  fetch("handle_assignment.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `thesisId=${encodeURIComponent(thesisId)}&studentName=${encodeURIComponent(studentName)}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error) {
+        alert(`Error: ${data.error}`);
+      } else if (data.success) {
+        alert(data.success);
+        location.reload(); // Reload the page to update the list
+      }
+    })
+    .catch((error) => {
+      console.error("Error assigning thesis:", error);
+      alert("An error occurred. Please try again.");
     });
 }
 
@@ -365,6 +489,20 @@ document.addEventListener("DOMContentLoaded", function() {
     showInvitationsButton.addEventListener("click", function (event){
       event.preventDefault(); // Prevent the default anchor behavior
       window.location.href = "show_invitations.html"; // Redirect to show_invitations.html
+    });
+  }
+});
+
+/* Κουμπί 'Ανάθεση Διπλωματικής */
+document.addEventListener("DOMContentLoaded", function() {
+  // Select the "Ανάθεση Διπλωματικής" button
+  const assignThesisButton = document.getElementById("assignThesisButton");
+
+  // Add a click event listener
+  if (assignThesisButton) {
+    assignThesisButton.addEventListener("click", function (event){
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.location.href = "assign_thesis.html"; // Redirect to assign_thesis.html
     });
   }
 });

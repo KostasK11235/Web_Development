@@ -232,6 +232,7 @@
   }
   
   /* next 4 <div class="thesis-container"> professor_theses.html */
+  .assign-thesis-container,
   .thesis-container {
     max-width: 800px;
     margin: 2em auto;
@@ -523,5 +524,77 @@
 }
 
 .reject-button:hover {
+  background-color: #c82333;
+}
+
+/* next  11 for assign_thesis.html */
+.assign-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em; /* Space between rows */
+}
+
+.search-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+}
+
+.assign-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+}
+
+.search-field {
+  width: calc(100% - 120px); /* Adjust width to fit alongside the button */
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-button {
+  width: 120px;
+  padding: 0.5em;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.assign-button,
+.cancel-button {
+  width: 120px;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.assign-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.assign-button:hover {
+  background-color: #218838;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.cancel-button:hover {
   background-color: #c82333;
 }

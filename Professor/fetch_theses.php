@@ -71,9 +71,15 @@ if ($queryType === 'participated') {
     }
 } else {
     // Default to supervised theses
-    $query = "SELECT t.th_title, t.th_description, t.th_status FROM Thesis AS t WHERE t.th_supervisor = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $professorEmail);
+    $query = "SELECT t.th_title, t.th_description, t.th_status, t.th_id FROM Thesis AS t WHERE t.th_supervisor = ?";
+    if (!empty($status)) {
+        $query .= " AND t.th_status = ? AND t.th_student_email IS NULL";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $professorEmail, $status);
+    }else {
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $professorEmail);
+    }
 }
 
 if (!$stmt) {
