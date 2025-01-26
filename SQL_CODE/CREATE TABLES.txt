@@ -9,7 +9,7 @@ PRIMARY KEY (prof_email));
 
 CREATE TABLE Student(
 std_full_name VARCHAR(50) NOT NULL,
-std_AM INT(10) NOT NULL,
+std_AM VARCHAR(10) NOT NULL,
 std_email VARCHAR(40) NOT NULL,
 std_mobile VARCHAR(10) NOT NULL,
 std_phone VARCHAR(15) NOT NULL,
