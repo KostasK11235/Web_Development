@@ -1,3 +1,5 @@
+SELECT th_id,th_title,th_status,th_student_email,th_supervisor,th_committee_member1,th_committee_member2 FROM Thesis;
+
 INSERT INTO Professor VALUES
 ('Ioannis Travoltas','travoltas@ceid.upatras.gr','6955555555','2610555555','Martial Mathematics','ΔΕΠ'),
 ('Mattheos Makonahis','makonahis@ceid.upatras.gr','6955555235','2610559855','Quantum Theater','ΕΔΙΠ'),
@@ -17,7 +19,7 @@ INSERT INTO Student VALUES
 ('Katerina Apostolou', 1098765, 'up1098765@ceid.upatras.gr', '6947890123', '2610789012', '789 Oak St, Thessaloniki, Greece', 190, 4),
 ('Andreas Nikolaou', 1098123, 'up1098123@ceid.upatras.gr', '6943456789', '2610345678', '101 Maple Ave, Heraklion, Greece', 120, 5),
 ('Stelios Anatolitis', 1120025, 'up1120025@ceid.upatras.gr', '6948901234', '2610678901', '234 Pine St, Ioannina, Greece', 150, 6),
-('Eleni Kyriakidou', 1233006, '1233006@ceid.upatras.gr', '6940123456', '2610890123', '567 Cedar Blvd, Larissa, Greece', 20, 1),
+('Eleni Kyriakidou', 1233006, 'up1233006@ceid.upatras.gr', '6940123456', '2610890123', '567 Cedar Blvd, Larissa, Greece', 20, 1),
 ('Christos Theocharatos', 1422007, 'up1422007@ceid.upatras.gr', '6946789012', '2610234567', '890 Birch St, Volos, Greece', 250, 5),
 ('Nikos Samarinas', 1023008, 'up1023008@ceid.upatras.gr', '6949012345', '2610567890', '345 Walnut St, Chania, Greece', 270, 5),
 ('Dimitris Hlias', 1073009, 'up1073009@ceid.upatras.gr', '6942345678', '2610123457', '678 Chestnut Ave, Rhodes, Greece', 240, 5),

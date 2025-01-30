@@ -14,7 +14,7 @@ BEGIN
 	INSERT INTO Users (usr_username,usr_password,usr_property) VALUES (NEW.std_email,'password','STUDENT');
 END$
 
-/* Ίσως χρειαστεί να φτιάξουμε trigger και για το update σε request αλλά λογικά οχι γιατι δεν θα υπάρχει ως επιλογή στη σελίδα */
+/* Ίσως χρειαστεί να φτιάξουμε trigger και για το update σε request αλλά λογικά οχι γιατι δεν θα υπάρχει ως επιλογή στη σελίδα. Με τη λογική ότι αν γίνει Αποδοχή/Απόρριψη σε request να μην μπορεί να γίνει ξανά update μέσα από τη βάση */
 
 CREATE TRIGGER insert_request
 BEFORE INSERT ON Requests
@@ -71,10 +71,10 @@ BEGIN
         SET th_committee_member1 = professor  
         WHERE th_id = thesis_id;
         
-        UPDATE Requests SET req_status='Accepted',req_answer=NOW() WHERE req_id=NEW.res_req_id;
+        UPDATE Requests SET req_status='Accepted',req_answer=CURDATE() WHERE req_id=NEW.res_req_id;
         
         IF member2 IS NOT NULL THEN
-        UPDATE Thesis SET th_status='Ενεργή' WHERE th_id=thesis_id;
+        UPDATE Thesis SET th_status='Ενεργή',th_assigned_date=CURDATE() WHERE th_id=thesis_id;
         UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor NOT LIKE professor; 
         END IF;
     ELSEIF member2 IS NULL THEN
@@ -83,15 +83,15 @@ BEGIN
         SET th_committee_member2 = professor
         WHERE th_id = thesis_id;
         
-        UPDATE Requests SET req_status='Accepted',req_answer=NOW() WHERE req_id=NEW.res_req_id;
+        UPDATE Requests SET req_status='Accepted',req_answer=CURDATE() WHERE req_id=NEW.res_req_id;
         
         IF member1 IS NOT NULL THEN
-        UPDATE Thesis SET th_status='Ενεργή' WHERE th_id=thesis_id;
+        UPDATE Thesis SET th_status='Ενεργή',th_assigned_date=CURDATE() WHERE th_id=thesis_id;
         UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor NOT LIKE professor;
         END IF;
     END IF;
-    ELSEIF NEW.res_response = 'Declined' THEN
-    UPDATE Requests SET req_status='Declined' WHERE req_id=NEW.res_req_id;
+    ELSE
+    UPDATE Requests SET req_status=NEW.res_response,req_answer=CURDATE() WHERE req_id=NEW.res_req_id;
     END IF;
 END$
 
