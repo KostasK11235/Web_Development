@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
   else if (document.querySelector(".assign-thesis-container")) {
     fetchTheses("supervised","thesisList","Υπό Ανάθεση")
   }
+  else if(document.querySelector(".manage-theses-container")) {
+    fetchTheses("participated","participatedThesesList","");
+  }
 });
 
 /* Fetch announcements from fetch_announcements.php */
@@ -62,6 +65,7 @@ function fetchAnnouncements(){
 /* Fetch theses data from fetch_theses.php */
 function fetchTheses(position, listId, status) {
   const thesisList = document.getElementById(listId);
+  let detailsPage = document.querySelector(".manage-theses-container") ? "manage_thesis_details.html" : "show_thesis_details.html";
 
   // Fetch data from the server
   fetch(`fetch_theses.php?queryType=${position}&status=${status}`)
@@ -89,8 +93,8 @@ function fetchTheses(position, listId, status) {
         html += `
           <div class="thesis-item">
             <h2>
-              <a href="show_thesis_details.html?title=${encodeURIComponent(thesis.th_title)}" class="thesis-link">
-                <strong>Θέμα:</strong>${thesis.th_title}
+              <a href="${detailsPage}?title=${encodeURIComponent(thesis.th_title)}&thesis_id=${thesis.th_id}" class="thesis-link">
+                <strong>Θέμα:</strong> ${thesis.th_title}
               </a>
             </h2>
             <p><strong>Περιγραφή:</strong>${thesis.th_description}</p>
@@ -467,7 +471,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* Κουμπί 'Ανάθεση Διπλωματικής' */
 document.addEventListener("DOMContentLoaded", function() {
-  // Select the "Ανάθεση Διπλωματικής" button 
+  // Select the "Ανάθεση Διπλωματικής" button
+  const assignThesisButton = document.getElementById("assignThesisButton");
+
+  // Add a click event listener
+  if (assignThesisButton) {
+    assignThesisButton.addEventListener("click", function (event){
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.location.href = "assign_thesis.html"; // Redirect to assign_thesis.html
+    });
+  }
+});
+
+/* Κουμπί 'Προβολή Διπλωματικών' */
+document.addEventListener("DOMContentLoaded", function() {
+  // Select the "Προβολή Διπλωματικών" button 
   const showThesesButton = document.getElementById("showThesesButton");
 
   // Add a click event listener
@@ -479,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
-/* Κουμπί 'Προσκλήσεις σε Επιτροπή */
+/* Κουμπί 'Προσκλήσεις σε Επιτροπή' */
 document.addEventListener("DOMContentLoaded", function() {
   // Select the "Προσκλήσεις σε Επιτροπή" button
   const showInvitationsButton = document.getElementById("showInvitationsButton");
@@ -493,16 +511,16 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
-/* Κουμπί 'Ανάθεση Διπλωματικής */
+/* Κουμπί 'Διαχείρηση Διπλωματικών' */
 document.addEventListener("DOMContentLoaded", function() {
-  // Select the "Ανάθεση Διπλωματικής" button
-  const assignThesisButton = document.getElementById("assignThesisButton");
+  // Select the "Διαχείρηση Διπλωματικών" button
+  const manageThesesButton = document.getElementById("manageThesesButton");
 
   // Add a click event listener
-  if (assignThesisButton) {
-    assignThesisButton.addEventListener("click", function (event){
+  if (manageThesesButton) {
+    manageThesesButton.addEventListener("click", function (event){
       event.preventDefault(); // Prevent the default anchor behavior
-      window.location.href = "assign_thesis.html"; // Redirect to assign_thesis.html
+      window.location.href = "manage_theses.html"; // Redirect to show_invitations.html
     });
   }
 });

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thesis Details page </title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Επικεφαλίδα -->
+    <header>
+      <img src="logo_gr.png" alt="University Logo" class="header-logo" />
+    </header>
+
+    <!-- Μενού πλοήγησης -->
+    <nav>
+      <a href="#home" id="gotohomepageButton">Αρχική</a>
+      <a href="#theses" id="createThesisButton">Δημιουργία Διπλωματικής</a>
+      <a href="#assign" id="assignThesisButton">Ανάθεση Διπλωματικής</a>
+      <a href="#theseslist" id="showThesesButton">Προβολή Διπλωματικών</a>
+      <a href="#invitations" id="showInvitationsButton">Προσκλήσεις σε Επιτροπή</a>
+      <a href="#statistics">Στατιστικά Διπλωματικών</a>
+      <a href="#management" id="manageThesesButton">Διαχείρηση Διπλωματικών</a>
+    </nav>
+
+    <nav class="logout-nav">
+      <a href="#logout" class="logout-button">Αποσύνδεση</a>
+    </nav>
+
+    <!-- Κύριο τμήμα -->
+    <main>
+        <!-- Thesis Member Section -->
+        <div class="announcement-header">
+            <h1>Λεπτομέρειες Διπλωματικής</h1>
+          </div>
+        <div class="thesis-details-container">
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const thesisId = urlParams.get("thesis_id");
+            
+                if (thesisId) {
+                    fetchThesisDetails(thesisId);
+                } else {
+                    document.getElementById("thesisDetails").innerHTML = "<p>Thesis not found.</p>";
+                }
+            });
+            
+            function fetchThesisDetails(thesisId) {
+                fetch(`fetch_thesis_details.php?thesis_id=${thesisId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            document.getElementById("thesisDetails").innerHTML = `<p>${data.error}</p>`;
+                            return;
+                        }
+                        
+                        // Extract thesis details
+                        const thesis = data.thesis_details;
+
+                        // Generate Thesis Information HTML
+                        let html = `
+                            <h2 style="text-align: center;">Τίτλος: ${thesis.th_title}</h2>
+                            <br>
+                            <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
+                            <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
+                            <p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>
+                            <p><strong>Φοιτητής:</strong> ${thesis.student_name}</p>
+                            <p><strong>Μέλος Επιτροπής 1:</strong> ${thesis.committee_member1_name}</p>
+                            <p><strong>Μέλος Επιτροπής 2:</strong> ${thesis.committee_member2_name}</p>
+                            <br>
+                        `;
+
+                        // Generate Committee Requests HTML
+                        if (data.committee_requests.length > 0) {
+                            html += `
+                                <h3 style="text-align: center;">Προσκλήσεις σε Επιτροπή</h3>
+                                <table border="1">
+                                <tr>
+                                    <th>Καθηγητής</th>
+                                    <th>Κατάσταση Αίτησης</th>
+                                    <th>Ημερομηνία Πρόσκλησης</th>
+                                    <th>Απάντηση</th>
+                                </tr>
+                        `;
+
+                        data.committee_requests.forEach(request => {
+                            html += `
+                                <tr>
+                                    <td>${request.prof_full_name}</td>
+                                    <td>${request.req_status}</td>
+                                    <td>${request.req_query_date}</td>
+                                    <td>${request.req_answer ? request.req_answer : "Χωρίς απάντηση"}</td>
+                                </tr>
+                            `;
+                        });
+
+                        html += `</table>`;
+                    } else {
+                        html += `<p>Δεν υπάρχουν προσκλήσεις σε επιτροπή για αυτή τη διπλωματική.</p>`;
+                    }
+
+                    // Add Cancel Assignment Button **ONLY** if the thesis has a student assigned
+                    if (thesis.student_name != 'Δεν έχει ανατεθεί') {
+                            html += `
+                                <br>
+                                <button id="cancelAssignmentBtn" class="cancel-button" data-thesis-id="${thesisId}">
+                                    Ακύρωση ανάθεσης
+                                </button>
+                            `;
+                    }
+            
+                    document.getElementById("thesisDetails").innerHTML = html;
+
+                    // Attach event listener to the cancel button
+                    const cancelBtn = document.getElementById("cancelAssignmentBtn");
+                        if (cancelBtn) {
+                            cancelBtn.addEventListener("click", function () {
+                                cancelAssignment(thesisId);
+                            });
+                        }
+
+                })
+                .catch(error => {
+                    console.error("Error fetching thesis details:", error);
+                    document.getElementById("thesisDetails").innerHTML = "<p>Failed to load thesis details.</p>";
+                });
+            }
+            function cancelAssignment(thesisId) {
+                if (!confirm("Είστε σίγουρος ότι θέλετε να ακυρώσετε την ανάθεση;")) {
+                    return;
+                }
+
+                fetch("cancel_assignment.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `thesisId=${encodeURIComponent(thesisId)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Η ανάθεση ακυρώθηκε επιτυχώς.");
+                        location.reload();
+                    } else {
+                        alert("Σφάλμα: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error cancelling assignment:", error);
+                    alert("Αποτυχία ακύρωσης της ανάθεσης. Προσπαθήστε ξανά.");
+                });
+            }
+            </script>
+            
+            <div id="thesisDetails">Loading...</div>
+        </div>
+    </main>
+
+
+    <!-- Υποσέλιδο -->
+    <footer>
+      <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
+    </footer>
+
+    <script src="script.js?v=1.0"></script>
+  </body>
+</html>

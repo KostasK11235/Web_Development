@@ -2,16 +2,17 @@
 <html lang="el">
   <head>
     <meta charset="UTF-8" />
-    <title>Invitations Page</title>
+    <title>Professor Manage Theses Page</title>
+    <!-- Σύνδεση με το εξωτερικό αρχείο CSS -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- Επικεφαλίδα -->
     <header>
-      <img src="logo_gr.png" alt="University Logo" class="header-logo" />
+        <img src="logo_gr.png" alt="University Logo" class="header-logo" />
     </header>
 
-    <!-- Μενού πλοήγησης -->
+    <!-- Μενού πλοήγησης  -->
     <nav>
       <a href="#home" id="gotohomepageButton">Αρχική</a>
       <a href="#theses" id="createThesisButton">Δημιουργία Διπλωματικής</a>
@@ -23,15 +24,17 @@
     </nav>
 
     <nav class="logout-nav">
-      <a href="#logout" class="logout-button">Αποσύνδεση</a>
-    </nav>
+        <a href="#logout" class="logout-button">Αποσύνδεση</a>
+      </nav>
 
-    <!-- Κύριο τμήμα -->
-    <main>
-        <div class="invitations-container">
-          <h1>Προσκλήσεις</h1>
-          <div id="invitationsList">
-            <!-- Invitations will be dynamically added here -->
+    <!-- Κύριο τμήμα: Φόρμα Σύνδεσης -->
+    <main>     
+        <!-- Thesis Member Section -->
+        <div class="manage-theses-container">
+          <h1>Διπλωματικές</h1>
+          <div id="participatedThesesList">
+            <!-- Theses will be dynamically loaded here -->
+            <p>Loading theses...</p>
           </div>
         </div>
     </main>
@@ -41,6 +44,7 @@
       <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
     </footer>
 
+    <!-- Σύνδεση με το εξωτερικό αρχείο JavaScript -->
     <script src="script.js?v=1.0"></script>
   </body>
 </html>

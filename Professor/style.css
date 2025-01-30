@@ -427,6 +427,8 @@
 }
 
 /* Theses Member Section */
+.manage-theses-container,
+.thesis-details-container,
 .theses-member-container {
   max-width: 800px;
   margin: 2em auto;

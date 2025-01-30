@@ -24,7 +24,7 @@ $stmt = null;
 // Build the query dynamically based on input
 if ($queryType === 'participated') {
     if ($role === 'Επιβλέπων') {
-        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
+        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name, t.th_id 
                   FROM Professor AS p 
                   INNER JOIN Thesis AS t 
                   ON t.th_supervisor = p.prof_email 
@@ -39,7 +39,7 @@ if ($queryType === 'participated') {
             $stmt->bind_param("s", $professorEmail);
         }
     } elseif ($role === 'Μέλος') {
-        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
+        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name, t.th_id
                   FROM Professor AS p 
                   INNER JOIN Thesis AS t 
                   ON t.th_supervisor = p.prof_email";
@@ -54,7 +54,7 @@ if ($queryType === 'participated') {
             $stmt->bind_param("ss", $professorEmail, $professorEmail);
         }
     } else {
-        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name 
+        $query = "SELECT t.th_title, t.th_description, t.th_status, p.prof_full_name, t.th_id 
                   FROM Professor AS p 
                   INNER JOIN Thesis AS t 
                   ON t.th_supervisor = p.prof_email";
