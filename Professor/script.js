@@ -47,7 +47,7 @@ function fetchAnnouncements(){
 			data.forEach((announcement) => {
 				html += `
 					<div class="announcement-item">
-					  <h2>${announcement.ann_title}</h2>
+					  <h2>Τίτλος: ${announcement.ann_title}</h2>
           	<p>${announcement.ann_content.substring(0, 256)}...</p>
           	<p><small>${announcement.ann_date}</small></p>
         	</div>
@@ -522,5 +522,37 @@ document.addEventListener("DOMContentLoaded", function() {
       event.preventDefault(); // Prevent the default anchor behavior
       window.location.href = "manage_theses.html"; // Redirect to show_invitations.html
     });
+  }
+});
+
+/* Κουμπί 'Αποσύνδεση' */
+document.addEventListener("DOMContentLoaded", function () {
+  const logoutButton = document.getElementById("logoutButton");
+
+  if (logoutButton) {
+      logoutButton.addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent the default anchor behavior
+
+          const confirmLogout = confirm("Είστε σίγουρος ότι θέλετε να αποσυνδεθείτε;");
+          if (confirmLogout) {
+              fetch("logout.php", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                  },
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      window.location.href = "index.html"; // Redirect to the main page
+                  } else {
+                      alert("Αποτυχία αποσύνδεσης. Δοκιμάστε ξανά.");
+                  }
+              })
+              .catch(error => {
+                  console.error("Error during logout:", error);
+              });
+          }
+      });
   }
 });
