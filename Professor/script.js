@@ -97,7 +97,7 @@ function fetchTheses(position, listId, status) {
                 <strong>Θέμα:</strong> ${thesis.th_title}
               </a>
             </h2>
-            <p><strong>Περιγραφή:</strong>${thesis.th_description}</p>
+            <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
             <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
             ${position === "participated" && thesis.prof_full_name ? `<p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>` : ""}
           </div>
@@ -266,7 +266,11 @@ document.addEventListener("DOMContentLoaded", function () {
           data.forEach((thesis) => {
             html += `
               <div class="thesis-item">
-                <h2><strong>Θέμα:</strong> ${thesis.th_title}</h2>
+                <h2>
+                  <a href="show_thesis_details.html?title=${encodeURIComponent(thesis.th_title)}&thesis_id=${thesis.th_id}" class="thesis-link">
+                  <strong>Θέμα:</strong> ${thesis.th_title}
+                  </a>
+                </h2>
                 <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
                 <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
                 <p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>
