@@ -54,7 +54,7 @@ CREATE PROCEDURE cancelAssignment(
 )
 BEGIN
     DECLARE studentEmail VARCHAR(40);
-    UPDATE Thesis SET th_student_email = NULL, th_committee_member1 = NULL, th_committee_member2 = NULL WHERE th_id = thesisID;
+    UPDATE Thesis SET th_student_email = NULL, th_committee_member1 = NULL, th_committee_member2 = NULL, th_assigned_date = NULL, th_status = DEFAULT WHERE th_id = thesisID;
     
     DELETE FROM Requests WHERE req_thesis_id = thesisID;
 END$$

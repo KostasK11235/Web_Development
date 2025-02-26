@@ -75,7 +75,7 @@ BEGIN
         
         IF member2 IS NOT NULL THEN
         UPDATE Thesis SET th_status='Ενεργή',th_assigned_date=CURDATE() WHERE th_id=thesis_id;
-        UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor NOT LIKE professor; 
+        UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor <> professor AND req_professor <> member2; 
         END IF;
     ELSEIF member2 IS NULL THEN
         -- Assign professor to the second available slot
@@ -87,7 +87,7 @@ BEGIN
         
         IF member1 IS NOT NULL THEN
         UPDATE Thesis SET th_status='Ενεργή',th_assigned_date=CURDATE() WHERE th_id=thesis_id;
-        UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor NOT LIKE professor;
+        UPDATE Requests SET req_status='Canceled' WHERE req_thesis_id=thesis_id AND req_professor <> professor AND req_professor <> member1;
         END IF;
     END IF;
     ELSE
