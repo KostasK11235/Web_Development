@@ -99,15 +99,29 @@
                         html += `<p>Δεν υπάρχουν προσκλήσεις σε επιτροπή για αυτή τη διπλωματική.</p>`;
                     }
 
-                    // Add Cancel Assignment Button **ONLY** if the thesis has a student assigned
-                    if (thesis.student_name != 'Δεν έχει ανατεθεί') {
-                            html += `
-                                <br>
-                                <button id="cancelAssignmentBtn" class="cancel-button" data-thesis-id="${thesisId}">
-                                    Ακύρωση ανάθεσης
-                                </button>
-                            `;
+                    html += `<br><div class="thesis-action-buttons-container">`;
+                    
+                    // Add Create Note Button **ONLY** if the thesis is active
+                    if (thesis.th_status === 'Ενεργή') {
+                        html += `
+                            <button id="addNoteBtn" class="add-note-button" data-thesis-id="${thesis.th_id}">
+                                Δημιουργία Σημείωσης
+                            </button>
+                            <button id="viewNotes" class="view-notes-button" data-thesis-id="${thesis.th_id}">
+                                Προβολή Σημειώσεων
+                            </button>
+                        `;
                     }
+                    // Add Cancel Assignment Button **ONLY** if the thesis has a student assigned
+                    if (thesis.student_name !== 'Δεν έχει ανατεθεί') {
+                        html += `
+                            <button id="cancelAssignmentBtn" class="cancel-button" data-thesis-id="${thesis.th_id}">
+                                Ακύρωση ανάθεσης
+                             </button>
+                        `;
+                    }
+
+                    html += `</div>`; // Close the flex container
             
                     document.getElementById("thesisDetails").innerHTML = html;
 

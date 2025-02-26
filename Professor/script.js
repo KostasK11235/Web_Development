@@ -108,10 +108,10 @@ function fetchTheses(position, listId, status) {
           <div class="assign-thesis-item">
             <h2>
               <a href="show_thesis_details.html?title=${encodeURIComponent(thesis.th_title)}" class="thesis-link">
-                <strong>Θέμα:</strong>${thesis.th_title}
+                <strong>Θέμα:</strong> ${thesis.th_title}
               </a>
             </h2>
-            <p><strong>Περιγραφή:</strong>${thesis.th_description}</p>
+            <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
             <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
             <div class="assign-buttons-container">
               <!-- Row for search field and search button -->

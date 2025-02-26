@@ -549,6 +549,7 @@
   gap: 1em;
 }
 
+.thesis-action-buttons-container,
 .assign-buttons {
   display: flex;
   justify-content: space-between;
@@ -579,6 +580,8 @@
   background-color: #0056b3;
 }
 
+.add-note-button,
+.view-notes-button,
 .assign-button,
 .cancel-button {
   width: 120px;
@@ -605,4 +608,22 @@
 
 .cancel-button:hover {
   background-color: #c82333;
+}
+
+.add-note-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.add-note-button:hover {
+  background-color: #218838;
+}
+
+.view-notes-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.view-notes-button:hover {
+  background-color: #218838;
 }
