@@ -249,6 +249,7 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   }
 
+  .assign-thesis-item,
   .thesis-item {
     border-bottom: 1px solid #ccc;
     padding: 1em 0;
@@ -558,7 +559,7 @@
 }
 
 .search-field {
-  width: calc(100% - 120px); /* Adjust width to fit alongside the button */
+  width: calc(100% - 140px); /* Adjust width to fit alongside the button */
   padding: 0.5em;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -566,8 +567,8 @@
 }
 
 .search-button {
-  width: 120px;
-  padding: 0.5em;
+  width: 140px;
+  padding: 0.5em 1em;
   border: none;
   border-radius: 4px;
   font-size: 1rem;

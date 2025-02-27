@@ -134,26 +134,27 @@ function fetchTheses(position, listId, status) {
       thesisList.innerHTML = html;
 
       // Add event listeners for search/confirm/cancel buttons
-      document.querySelectorAll(".search-button").forEach((button) => {
-        button.addEventListener("click", function () {
-          const inputField = document.querySelector(".search-field");
-          const searchValue = inputField.value.trim();
+      document.querySelectorAll(".assign-thesis-item").forEach((thesisItem) => {
+        const searchButton = thesisItem.querySelector(".search-button");
+        const assignButton = thesisItem.querySelector(".assign-button");
+        const cancelButton = thesisItem.querySelector(".cancel-button");
+        const searchField = thesisItem.querySelector(".search-field");
+
+        // Search button event listener
+        searchButton.addEventListener("click", function () {
+          const searchValue = searchField.value.trim();
 
           if (searchValue) {
-            searchStudentAction(searchValue);
+            searchStudentAction(searchValue, thesisItem);
           } else {
             alert("Please enter a student AM or name.");
           }
         });
-      });
 
-      document.querySelectorAll(".assign-button").forEach((button) => {
-        button.addEventListener("click", function () {
-          const thesisId = button.dataset.thesisId;
-          // Find the parent container of the button
-          const parentContainer = button.closest(".assign-thesis-item");
-          const inputField = document.querySelector(".search-field");
-          const studentName = inputField.value.trim();
+        // Assign button event listener
+        assignButton.addEventListener("click", function () {
+          const thesisId = assignButton.dataset.thesisId;
+          const studentName = searchField.value.trim();
 
           if (studentName) {
             handleAssignmentAction(thesisId, studentName);
@@ -161,12 +162,10 @@ function fetchTheses(position, listId, status) {
             alert("No student selected for assignment.");
           }
         });
-      });
 
-      document.querySelectorAll(".cancel-button").forEach((button) => {
-        button.addEventListener("click", function () {
-          const inputField = document.querySelector(".search-field");
-          inputField.value = ""; // Clear the input field
+        // Cancel button event listener
+        cancelButton.addEventListener("click", function () {
+          searchField.value = ""; // Clear the input field
         });
       });
     })
@@ -179,7 +178,7 @@ function fetchTheses(position, listId, status) {
 
 /* Search for the student with the given AM or name on assign_thesis.html */
 // Fetch and display student name
-function searchStudentAction(searchValue) {
+function searchStudentAction(searchValue, thesisItem) {
   fetch("search_student.php", {
     method: "POST",
     headers: {
@@ -189,14 +188,14 @@ function searchStudentAction(searchValue) {
   })
     .then((response) => response.json())
     .then((data) => {
-      const inputField = document.querySelector(".search-field"); // Ensure this points to the correct field
+      const inputField = thesisItem.querySelector(".search-field"); // Ensure this points to the correct field
 
       if (data.error) {
         alert(`Error: ${data.error}`);
       } else if (data.length > 0 && data[0].std_full_name) {
         inputField.value = data[0].std_full_name; // Display the student's name in the field
       } else {
-        const inputField = document.querySelector(".search-field");
+        const inputField = thesisItem.querySelector(".search-field");
         inputField.value = ""; // Clear the input field
         alert("No matching student found.");
       }
