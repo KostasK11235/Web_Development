@@ -13,9 +13,11 @@
 
     <!-- Κεντρικό τμήμα -->
     <main>
-      <div class="new-thesis-container">
+      <div class="thesis-header">
         <h1>Δημιουργία Νέου Θέματος</h1>
+      </div>
 
+      <div class="new-thesis-container">
         <form id="newThesisForm" method="POST" enctype="multipart/form-data">
           <!-- Title -->
           <div class="form-group">
@@ -41,14 +43,6 @@
             <button type="submit" id="submitButton" class="submit-button">Υποβολή</button>
           </div>
         </form>
-
-        <!-- Popup Message -->
-        <div id="popup" class="popup hidden">
-            <div class="popup-content">
-              <span class="close-button">&times;</span>
-              <p id="popupMessage"></p>
-            </div>
-        </div>
       </div>
     </main>
 
@@ -56,5 +50,7 @@
     <footer>
       <p>&copy; 2025 - ΤΜΗΜΑ ΜΗΧΑΝΙΚΩΝ Η/Υ ΚΑΙ ΠΛΗΡΟΦΟΡΙΚΗΣ </p>
     </footer>
+
+    <script src="script.js?v=1.0"></script>
   </body>
 </html>

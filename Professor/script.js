@@ -18,6 +18,25 @@ document.addEventListener("DOMContentLoaded", function () {
   else if(document.querySelector(".manage-theses-container")) {
     fetchTheses("participated","participatedThesesList","");
   }
+  else if(document.querySelector(".thesis-details-container")) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const thesisId = urlParams.get("thesis_id");
+
+    if(thesisId) {
+      fetchThesisDetails(thesisId);
+    } else {
+      document.getElementById("thesisDetails").innerHTML = "<p>Thesis not found.</p>";    }
+  }
+  else if(document.querySelector(".new-note-container")) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const thesisId = urlParams.get("thesis_id");
+
+    if(thesisId) {
+      loadCreateNote(thesisId);
+    } else {
+      document.getElementById("notesForm").innerHTML = "<p>Thesis not found.</p>";
+    }
+  }
 });
 
 /* Fetch announcements from fetch_announcements.php */
@@ -174,6 +193,193 @@ function fetchTheses(position, listId, status) {
       console.error("Error fetching theses:", error);
       thesisList.innerHTML = "<p>Failed to load theses. Please try again later.</p>";
     });
+}
+
+// Fetch thesis details for manage_thesis_details.html
+function fetchThesisDetails(thesisId) {
+  fetch(`fetch_thesis_details.php?thesis_id=${thesisId}`)
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              document.getElementById("thesisDetails").innerHTML = `<p>${data.error}</p>`;
+              return;
+          }
+          
+          // Extract thesis details
+          const thesis = data.thesis_details;
+
+          // Generate Thesis Information HTML
+          let html = `
+              <h2 style="text-align: center;">Τίτλος: ${thesis.th_title}</h2>
+              <br>
+              <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
+              <p><strong>Κατάσταση:</strong> ${thesis.th_status}</p>
+              <p><strong>Επιβλέπων:</strong> ${thesis.prof_full_name}</p>
+              <p><strong>Φοιτητής:</strong> ${thesis.student_name}</p>
+              <p><strong>Μέλος Επιτροπής 1:</strong> ${thesis.committee_member1_name}</p>
+              <p><strong>Μέλος Επιτροπής 2:</strong> ${thesis.committee_member2_name}</p>
+              <br>
+          `;
+
+          // Generate Committee Requests HTML
+          if (data.committee_requests.length > 0) {
+              html += `
+                  <h3 style="text-align: center;">Προσκλήσεις σε Επιτροπή</h3>
+                  <table border="1">
+                  <tr>
+                      <th>Καθηγητής</th>
+                      <th>Κατάσταση Αίτησης</th>
+                      <th>Ημερομηνία Πρόσκλησης</th>
+                      <th>Απάντηση</th>
+                  </tr>
+          `;
+
+          data.committee_requests.forEach(request => {
+              html += `
+                  <tr>
+                      <td>${request.prof_full_name}</td>
+                      <td>${request.req_status}</td>
+                      <td>${request.req_query_date}</td>
+                      <td>${request.req_answer ? request.req_answer : "Χωρίς απάντηση"}</td>
+                  </tr>
+              `;
+          });
+
+          html += `</table>`;
+      } else {
+          html += `<p>Δεν υπάρχουν προσκλήσεις σε επιτροπή για αυτή τη διπλωματική.</p>`;
+      }
+
+      html += `<br><div class="thesis-action-buttons-container">`;
+      
+      // Add Create Note Button **ONLY** if the thesis is active
+      if (thesis.th_status === 'Ενεργή') {
+          html += `
+              <button id="addNoteBtn" class="add-note-button" data-thesis-id="${thesis.th_id}">
+                  Δημιουργία Σημείωσης
+              </button>
+              <button id="viewNotes" class="view-notes-button" data-thesis-id="${thesis.th_id}">
+                  Προβολή Σημειώσεων
+              </button>
+          `;
+      }
+      // Add Cancel Assignment Button **ONLY** if the thesis has a student assigned
+      if (thesis.student_name !== 'Δεν έχει ανατεθεί') {
+          html += `
+              <button id="cancelAssignmentBtn" class="cancel-button" data-thesis-id="${thesis.th_id}">
+                  Ακύρωση ανάθεσης
+               </button>
+          `;
+      }
+
+      html += `</div>`; // Close the flex container
+
+      document.getElementById("thesisDetails").innerHTML = html;
+
+      // Attach event listener to the cancel button
+      const cancelBtn = document.getElementById("cancelAssignmentBtn");
+      if (cancelBtn) {
+          cancelBtn.addEventListener("click", function () {
+              cancelAssignment(thesisId);
+          });
+      }
+
+      const addNoteBtn = document.getElementById("addNoteBtn");
+      if (addNoteBtn) {
+          addNoteBtn.addEventListener("click", function() {
+              window.location.href = `create_note.html?thesis_id=${thesisId}`;
+          });
+      }    
+
+  })
+  .catch(error => {
+      console.error("Error fetching thesis details:", error);
+      document.getElementById("thesisDetails").innerHTML = "<p>Failed to load thesis details.</p>";
+  });
+}
+
+// Cancel the assignment of the thesis from them assigned student 
+function cancelAssignment(thesisId) {
+  if (!confirm("Είστε σίγουρος ότι θέλετε να ακυρώσετε την ανάθεση;")) {
+      return;
+  }
+
+  fetch("cancel_assignment.php", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `thesisId=${encodeURIComponent(thesisId)}`
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          alert("Η ανάθεση ακυρώθηκε επιτυχώς.");
+          location.reload();
+      } else {
+          alert("Σφάλμα: " + data.error);
+      }
+  })
+  .catch(error => {
+      console.error("Error cancelling assignment:", error);
+      alert("Αποτυχία ακύρωσης της ανάθεσης. Προσπαθήστε ξανά.");
+  });
+}
+
+function loadCreateNote(thesisId) {
+  fetch(`fetch_thesis_details.php?thesis_id=${thesisId}`)
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              document.getElementById("notesForm").innerHTML = `<p>${data.error}</p>`;
+              return;
+          }
+
+          // Extract thesis details
+          const thesis = data.thesis_details;
+
+          // Generate Notes Form HTML
+          let html = `
+              <h2 style="text-align: center;">Τίτλος: ${thesis.th_title}</h2>
+              <br>
+              <p><strong>Περιγραφή:</strong> ${thesis.th_description}</p>
+              <br>
+
+              <form id="newNote" method="POST" enctype="multipart/form-data">
+                  <!-- Description -->
+                  <div class="note-group">
+                      <label for="noteBody">Περιγραφή</label>
+                      <textarea id="noteBody" name="noteBody" placeholder="Περιγραφή θέματος..." rows="10" maxlength="300" required></textarea>
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="form-buttons">
+                      <button type="button" id="cancelNoteButton" class="cancel-note-button">Ακύρωση</button>
+                      <button type="submit" id="submitNoteButton" class="submit-note-button">Υποβολή</button>
+                  </div>
+              </form>
+
+              <!-- Popup Message -->
+              <div id="popup" class="popup hidden">
+                  <div class="popup-content">
+                      <span class="close-button">&times;</span>
+                      <p id="popupMessage"></p>
+                  </div>
+              </div>
+          `;
+
+          document.getElementById("notesForm").innerHTML = html;
+
+          // Attach event listeners for buttons
+          document.getElementById("cancelNoteButton").addEventListener("click", function () {
+              window.history.back(); // Go back to the previous page
+          });
+
+      })
+      .catch(error => {
+          console.error("Error fetching thesis details:", error);
+          document.getElementById("notesForm").innerHTML = "<p>Failed to load thesis details.</p>";
+      });
 }
 
 /* Search for the student with the given AM or name on assign_thesis.html */
@@ -420,6 +626,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener("click", function () {
+      // Toggle the password input type between "password" and "text"
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+
+      // Change the button text or icon to reflect the current state
+      togglePassword.textContent = type === "password" ? "👁️" : "🕶️";
+    });
+  }
+});
+
 /* Κουμπί 'Αρχική' */
 document.addEventListener("DOMContentLoaded", function() {
   // Select the "Αρχική" button 
@@ -471,6 +693,62 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* Κουμπί 'Υποβολή' στο new_thesis.html */
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("Page loaded"); // Debugging
+
+  const form = document.getElementById("newThesisForm");
+  const submitButton = document.getElementById("submitButton");
+
+  if(submitButton) { 
+    // Handle form submission
+    form.addEventListener("submit", function (event) {  
+      event.preventDefault(); // Prevent default form submission
+      console.log("Form submitted"); // Debugging
+
+      const title = document.getElementById("thesisTitle").value;
+      const description = document.getElementById("thesisDescription").value;
+      const fileInput = document.getElementById("thesisAttachment");
+      const file = fileInput.files[0];
+
+      console.log("Title:", title); // Debugging
+      console.log("Description:", description); // Debugging
+      console.log("File:", file); // Debugging
+
+      // Create FormData object to send both file and form data
+      const formData = new FormData();
+      formData.append("thesisTitle", title);
+      formData.append("thesisDescription", description);
+      if (file) {
+          formData.append("thesisAttachment", file);
+      }
+
+      // Send the data to submit_thesis.php
+      fetch("submit_thesis.php", {
+          method: "POST",
+          body: formData,
+      })
+      .then((response) => {
+        console.log("Response received:", response); // Debugging
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Data received:", data); // Debugging
+        if (data.success) {
+          // Thesis created successfully
+          alert("Η διπλωματική δημιουργήθηκε επιτυχώς!");
+          form.reset(); // Clear all fields
+        } else {
+          // Thesis creation failed
+          alert("Αποτυχία δημιουργίας διπλωματικής: " + data.error);
+          }
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Debugging
+        alert("Αποτυχία δημιουργίας διπλωματικής. Προσπαθήστε ξανά.");
+      });
+    });
+  }
+});
 
 /* Κουμπί 'Ανάθεση Διπλωματικής' */
 document.addEventListener("DOMContentLoaded", function() {
